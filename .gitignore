@@ -77,3 +77,8 @@ Desktop.ini
 *.swp
 *.swo
 *.tmp
+
+############################################
+# Codex last handoff (local copy helper)
+############################################
+docs/codex/LATEST.md

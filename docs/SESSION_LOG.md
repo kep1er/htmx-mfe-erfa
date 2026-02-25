@@ -277,3 +277,32 @@
 
 **Suggested Next Step**
 - Add a simple pre-commit helper script to automate the LATEST.md staged-file + delimiter verification.
+
+### 2026-02-25 - Session 9
+**Goal**
+- Simplify handoff workflow so `docs/codex/LATEST.md` is a local copy helper and is not committed.
+
+**Implemented**
+- Updated `.gitignore` to ignore `docs/codex/LATEST.md` while keeping `docs/codex/` directory tracked.
+- Simplified `docs/CODEX_WORKING_AGREEMENT.md`:
+  - removed Standard Chat Header section
+  - removed references to `docs/codex/TEMPLATE.md`
+  - removed staged/pre-commit verification rules for `LATEST.md`
+  - added one clear rule: paste handoff in chat and overwrite `docs/codex/LATEST.md` with same content, but do not commit it
+- Removed `docs/codex/TEMPLATE.md` (no longer referenced).
+- Updated `docs/TODO.md` for the simplified local-copy workflow.
+
+**Decisions / Assumptions**
+- Keep workflow minimal: one local handoff copy file plus chat output, without template or commit gating.
+
+**Known Issues / Follow-ups**
+- `docs/codex/LATEST.md` remains a local working file and should stay out of commits.
+
+**Verification**
+- Commands run:
+    - `git status --short` (scope checks before/after staging)
+- Manual checks:
+    - Confirmed `docs/CODEX_WORKING_AGREEMENT.md` no longer contains Standard Chat Header or LATEST staged-file verification rules.
+
+**Suggested Next Step**
+- Add a tiny convenience script to write the final handoff text to `docs/codex/LATEST.md` after each task.
