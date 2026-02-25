@@ -28,9 +28,8 @@ export default async function globalSetup(): Promise<void> {
       `Last error: ${lastError}`,
       "",
       "Start the stack, then rerun E2E tests:",
-      "docker compose up -d postgres nginx",
-      "cd apps/catalog-service && mvn spring-boot:run",
-      "cd apps/order-service && mvn spring-boot:run"
+      "docker compose up -d --build",
+      "cd tests/e2e && npm run e2e:all"
     ].join("\n")
   );
 }

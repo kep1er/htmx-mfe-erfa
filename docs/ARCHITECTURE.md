@@ -54,9 +54,17 @@ Owns:
 - Tailwind provides styling (global shell + non-shadow styles)
 
 ## Proxy Path Conventions
-- `/catalog/**` is owned by `catalog-service` via nginx reverse proxy to `http://host.docker.internal:8081`
-- `/orders/**` is owned by `order-service` via nginx reverse proxy to `http://host.docker.internal:8082`
+- `/catalog/**` is owned by `catalog-service`
+- `/orders/**` is owned by `order-service`
 - `/assets/**` is served directly by nginx static files
+
+### Runtime Proxy Targets
+- Docker Compose runtime uses `web/nginx/nginx.docker.conf`:
+  - `/catalog/**` -> `http://catalog-service:8081`
+  - `/orders/**` -> `http://order-service:8082`
+- Host-local app runtime can still use `web/nginx/nginx.conf`:
+  - `/catalog/**` -> `http://host.docker.internal:8081`
+  - `/orders/**` -> `http://host.docker.internal:8082`
 
 ## Stable Contracts
 These must not change without documenting in `docs/DECISIONS.md`:
@@ -73,4 +81,5 @@ These must not change without documenting in `docs/DECISIONS.md`:
   - nginx shell + htmx + proxy routing wired
   - Tailwind CLI setup added and output integrated into nginx assets
   - Lit demo component added in `packages/ui-components` and served by nginx
-  - Docker Compose added for nginx + postgres
+  - Docker Compose now runs full stack: postgres + catalog-service + order-service + nginx
+  - Playwright `e2e:all` script now orchestrates compose up/build + wait + test

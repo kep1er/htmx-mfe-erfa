@@ -19,43 +19,29 @@ Demo webshop monorepo with:
 - Node.js `20+` and npm
 - Docker Desktop (or Docker Engine + Compose)
 
-## Run (Bootstrap Step 1)
-1. Start infrastructure:
-   ```bash
-   docker compose up -d postgres nginx
-   ```
-2. Build UI component asset (copies to Nginx assets):
-   ```bash
-   cd packages/ui-components
-   npm run build
-   cd ../..
-   ```
-3. Install and build Tailwind CSS:
-   ```bash
-   cd web/tailwind
-   npm install
-   npm run build
-   cd ../..
-   ```
-4. Run Spring Boot apps in two terminals:
-   ```bash
-   cd apps/catalog-service
-   mvn spring-boot:run
-   ```
-   ```bash
-   cd apps/order-service
-   mvn spring-boot:run
-   ```
-5. Open `http://localhost:8080`.
+## Run Full Stack (Docker Compose)
+```bash
+docker compose up -d --build
+```
+
+This starts:
+- `postgres`
+- `catalog-service` (container)
+- `order-service` (container)
+- `nginx`
 
 ## E2E Smoke Tests (Playwright)
-Run these only after the app stack is up (`nginx`, `catalog-service`, `order-service`).
-
 ### Prerequisites / Start Stack
 ```bash
-docker compose up -d postgres nginx
-cd apps/catalog-service && mvn spring-boot:run
-cd apps/order-service && mvn spring-boot:run
+docker compose up -d --build
+```
+
+### One-Command Local E2E (Cross-Platform)
+```bash
+cd tests/e2e
+npm install
+npm run install:browsers
+npm run e2e:all
 ```
 
 ### Windows (PowerShell)
@@ -63,7 +49,7 @@ cd apps/order-service && mvn spring-boot:run
 cd tests/e2e
 npm install
 npm run install:browsers
-npm test
+npm run e2e:all
 npm run report
 ```
 
@@ -72,14 +58,23 @@ npm run report
 cd tests/e2e
 npm install
 npm run install:browsers
-npm test
+npm run e2e:all
 npm run report
 ```
 
-### Optional: Headed Mode
+### Optional
 ```bash
 cd tests/e2e
 npm run test:headed
+npm run e2e:all:down
+```
+- `e2e:all` leaves the stack running by default.
+- `e2e:all:down` tears the stack down after the test run.
+
+### If E2E Fails
+```bash
+docker compose ps
+docker compose logs --tail 200 nginx catalog-service order-service postgres
 ```
 
 ## Quick Verification
@@ -93,5 +88,6 @@ npm run test:headed
   - `http://localhost:8082/actuator/health`
 
 ## Notes
-- Nginx proxies to local app processes via `host.docker.internal`.
+- Compose uses `web/nginx/nginx.docker.conf` (proxy by service name).
+- `web/nginx/nginx.conf` remains for host-local app mode (`host.docker.internal` proxy targets).
 - `catalog-service` Flyway migration is in `apps/catalog-service/src/main/resources/db/migration/V1__init_catalog.sql`.

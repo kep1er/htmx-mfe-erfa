@@ -51,3 +51,18 @@
 - **Decision**: Tailwind build source is `web/tailwind/input.css` and output is `web/nginx/assets/css/app.css`
 - **Why**: Directly couples shell styles to nginx static serving with minimal complexity
 - **Impact**: Tailwind rebuild is required after class changes in shell/templates
+
+- **Date**: 2026-02-25
+- **Decision**: Move local compose runtime to full-stack containers (postgres + catalog-service + order-service + nginx)
+- **Why**: Enable self-contained local E2E execution without requiring manual Maven app startup
+- **Impact**: Compose now builds/runs both Spring Boot services and wires service-to-service networking internally
+
+- **Date**: 2026-02-25
+- **Decision**: Keep two nginx configs: `nginx.docker.conf` (compose runtime) and `nginx.conf` (host-local app mode)
+- **Why**: Preserve local-host development flexibility while making compose runtime deterministic
+- **Impact**: Compose mounts `nginx.docker.conf`; local-host mode can still target `host.docker.internal`
+
+- **Date**: 2026-02-25
+- **Decision**: Add `tests/e2e` Node-based `e2e:all` orchestration script
+- **Why**: Provide one cross-platform command to compose up/build, wait for nginx, and run Playwright
+- **Impact**: Local E2E flow becomes a single command; stack is left running by default unless `--down` is used

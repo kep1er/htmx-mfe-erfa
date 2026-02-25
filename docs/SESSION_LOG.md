@@ -122,3 +122,44 @@
 
 **Suggested Next Step**
 - Add a single helper script to start the stack and then run Playwright smoke tests.
+
+### 2026-02-25 - Session 4
+**Goal**
+- Containerize both Spring Boot apps and enable a fully self-contained local E2E flow.
+
+**Implemented**
+- Added multi-stage Dockerfiles for:
+  - `apps/catalog-service/Dockerfile`
+  - `apps/order-service/Dockerfile`
+- Added app-level `.dockerignore` files to keep Docker build contexts small.
+- Updated `docker-compose.yml` to run full stack:
+  - `postgres`
+  - `catalog-service`
+  - `order-service`
+  - `nginx`
+- Added docker-oriented nginx config `web/nginx/nginx.docker.conf` and switched compose to mount it.
+- Preserved host-local nginx config (`web/nginx/nginx.conf`) for non-compose app mode.
+- Added Node-based one-command E2E orchestrator:
+  - `tests/e2e/scripts/e2e-all.mjs`
+  - `npm run e2e:all`
+  - `npm run e2e:all:down`
+- Updated README and architecture/decision/todo docs for compose-based local runtime.
+
+**Decisions / Assumptions**
+- Keep published host ports (`8081`, `8082`) for easier local inspection while still using internal service-name routing from nginx.
+- `e2e:all` leaves stack running by default; explicit `--down` variant handles teardown.
+
+**Known Issues / Follow-ups**
+- Existing unrelated local modification in `docs/CODEX_WORKING_AGREEMENT.md` was intentionally left out of this task commit.
+
+**Verification**
+- Commands run:
+    - `docker compose up -d --build`
+    - `cd tests/e2e && npm run e2e:all`
+    - `docker compose ps`
+- Manual checks:
+    - Compose services confirmed running on stable ports.
+    - Playwright smoke tests passed against compose-backed nginx.
+
+**Suggested Next Step**
+- Add container healthchecks for `catalog-service` and `order-service` and tighten compose dependency readiness.

@@ -19,10 +19,13 @@
 - [x] Update `CODEX_WORKING_AGREEMENT.md` with commit-per-prompt Git workflow rules
 - [x] Add Playwright preflight stack check (global setup with fast fail message)
 - [x] Add README "Prerequisites / Start Stack" snippet for E2E
+- [x] Containerize `catalog-service` and `order-service` with multi-stage Dockerfiles
+- [x] Run full stack in `docker-compose.yml` (postgres + both services + nginx)
+- [x] Add Node-based one-command E2E runner (`npm run e2e:all`)
 
 ## Next (Do Not Implement Yet)
-- [ ] Add a lightweight script to start required services and run `tests/e2e` smoke tests in one command
-- [ ] Improve preflight to optionally validate `/catalog/health` and `/orders/health` before specs run
+- [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
+- [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 - [ ] Implement one interactive catalog filter htmx slice and extend smoke tests for it
 
 ## Later
@@ -30,8 +33,7 @@
 - [ ] Add reusable shared Lit components for product card / cart badge
 - [ ] Add integration tests for fragment endpoints
 - [ ] Improve styling and design consistency
-- [ ] Add containerization for both Spring Boot apps in Compose
 - [ ] Add CI checks (build/test/lint)
 
 ## Blocked / Questions
-- [ ] Confirm whether to containerize both Spring apps in the next step or keep local-run mode for one more iteration
+- [ ] Confirm whether to keep publishing app ports `8081` and `8082` on host in compose, or make them internal-only
