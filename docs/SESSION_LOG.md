@@ -1,0 +1,61 @@
+# Session Log
+
+## Session Template
+### YYYY-MM-DD - Session N
+**Goal**
+- ...
+
+**Implemented**
+- ...
+
+**Decisions / Assumptions**
+- ...
+
+**Known Issues / Follow-ups**
+- ...
+
+**Verification**
+- Commands run:
+    - ...
+- Manual checks:
+    - ...
+
+**Suggested Next Step**
+- ...
+
+### 2026-02-25 - Session 1
+**Goal**
+- Bootstrap runnable first slice: 2 Spring Boot services, nginx shell/proxy, catalog DB baseline, Tailwind, and one Lit component.
+
+**Implemented**
+- Created `catalog-service` (Spring Boot 4.0.2, Thymeleaf, JPA, Flyway, PostgreSQL config, health routes, product fragment).
+- Created `order-service` (Spring Boot 4.0.2, Thymeleaf, in-memory placeholder cart fragment, health routes).
+- Added Flyway migration `V1__init_catalog.sql` with `products` schema and demo seed records.
+- Added nginx config for static shell + proxy routes `/catalog/**` and `/orders/**`.
+- Built shell `index.html` with htmx fragment loading and Lit component usage.
+- Added Tailwind CLI config and built CSS output to nginx assets.
+- Initialized `packages/ui-components` and built `shop-badge.js` into dist + nginx assets.
+- Added Docker Compose for `postgres` and `nginx`.
+- Rewrote README with exact bootstrap run commands and verification URLs.
+
+**Decisions / Assumptions**
+- Spring Boot pinned to `4.0.2`.
+- Apps run locally via Maven for now; Compose only handles nginx/postgres.
+- nginx proxies to local apps using `host.docker.internal`.
+- `packages/ui-components` kept standalone (no npm workspaces).
+
+**Known Issues / Follow-ups**
+- No cart behavior implemented yet (placeholder fragment only).
+- No app containers in Compose yet (intentionally deferred).
+- Lit component currently imports Lit from CDN URL.
+
+**Verification**
+- Commands run:
+    - `npm run build` in `packages/ui-components`
+    - `npm install` in `web/tailwind`
+    - `npm run build` in `web/tailwind`
+- Manual checks:
+    - Not executed in this session (services not started end-to-end here).
+
+**Suggested Next Step**
+- Implement first real catalog htmx vertical slice: `/catalog/fragments/products` filtering/search interaction from server-rendered Thymeleaf.

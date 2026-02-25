@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Health</title>
+</head>
+<body>
+<main>
+    <h1>Order Service Health</h1>
+    <p><strong>Service:</strong> <span th:text="${serviceName}">order-service</span></p>
+    <p><strong>Status:</strong> <span th:text="${status}">UP</span></p>
+    <p><strong>Timestamp:</strong> <span th:text="${timestamp}">-</span></p>
+</main>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "@webshop/ui-components",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Shared native Web Components for the demo webshop",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "clean": "node scripts/clean.mjs"
+  }
+}

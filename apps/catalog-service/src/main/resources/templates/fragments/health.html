@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="healthStatus" class="rounded border p-4">
+    <h2 class="text-lg font-semibold">Catalog Service</h2>
+    <p>Status: <span th:text="${status}">UP</span></p>
+    <p>Updated: <span th:text="${timestamp}">-</span></p>
+</section>
+</body>
+</html>

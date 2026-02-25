@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: webshop-postgres
+    environment:
+      POSTGRES_DB: webshop
+      POSTGRES_USER: webshop
+      POSTGRES_PASSWORD: webshop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webshop -d webshop"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: webshop-nginx
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./web/nginx/html:/usr/share/nginx/html:ro
+      - ./web/nginx/assets:/usr/share/nginx/assets:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  postgres-data:

@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="cartSummary" class="rounded border p-4">
+    <h2 class="text-lg font-semibold">Cart (Placeholder)</h2>
+    <p>Items: <span th:text="${itemCount}">0</span></p>
+    <p>Total: <span th:text="${total}">$0.00</span></p>
+</section>
+</body>
+</html>

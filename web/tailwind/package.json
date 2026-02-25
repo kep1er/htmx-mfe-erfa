@@ -1,0 +1,12 @@
+{
+  "name": "@webshop/tailwind",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -c tailwind.config.js -i input.css -o ../nginx/assets/css/app.css --minify",
+    "watch": "tailwindcss -c tailwind.config.js -i input.css -o ../nginx/assets/css/app.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

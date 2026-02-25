@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webshop Demo Shell</title>
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script type="module" src="/assets/ui-components/shop-badge.js"></script>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+<main class="mx-auto max-w-4xl p-6 md:p-10">
+    <header class="mb-8 rounded border bg-white p-6 shadow-sm">
+        <h1 class="text-3xl font-bold">Webshop Demo Shell</h1>
+        <p class="mt-2 text-slate-600">Nginx + htmx + Thymeleaf fragments + Lit component.</p>
+        <div class="mt-4">
+            <shop-badge label="Bootstrap Step 1"></shop-badge>
+        </div>
+    </header>
+
+    <section class="grid gap-4 md:grid-cols-2">
+        <article class="rounded border bg-white p-4 shadow-sm">
+            <div class="mb-3 flex items-center justify-between">
+                <h2 class="text-lg font-semibold">Catalog Service</h2>
+                <button class="rounded bg-slate-900 px-3 py-2 text-sm text-white"
+                        hx-get="/catalog/fragments/health"
+                        hx-target="#catalog-health"
+                        hx-swap="innerHTML">
+                    Refresh
+                </button>
+            </div>
+            <div id="catalog-health"
+                 hx-get="/catalog/fragments/health"
+                 hx-trigger="load"
+                 hx-swap="innerHTML">
+                Loading catalog health...
+            </div>
+            <div class="mt-4"
+                 hx-get="/catalog/fragments/products"
+                 hx-trigger="load"
+                 hx-swap="innerHTML">
+                Loading catalog products...
+            </div>
+        </article>
+
+        <article class="rounded border bg-white p-4 shadow-sm">
+            <div class="mb-3 flex items-center justify-between">
+                <h2 class="text-lg font-semibold">Order Service</h2>
+                <button class="rounded bg-slate-900 px-3 py-2 text-sm text-white"
+                        hx-get="/orders/fragments/health"
+                        hx-target="#order-health"
+                        hx-swap="innerHTML">
+                    Refresh
+                </button>
+            </div>
+            <div id="order-health"
+                 hx-get="/orders/fragments/health"
+                 hx-trigger="load"
+                 hx-swap="innerHTML">
+                Loading order health...
+            </div>
+            <div class="mt-4"
+                 hx-get="/orders/fragments/cart"
+                 hx-trigger="load"
+                 hx-swap="innerHTML">
+                Loading cart placeholder...
+            </div>
+        </article>
+    </section>
+</main>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

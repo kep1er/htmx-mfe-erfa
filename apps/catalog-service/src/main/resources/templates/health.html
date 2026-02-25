@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalog Health</title>
+</head>
+<body>
+<main>
+    <h1>Catalog Service Health</h1>
+    <p><strong>Service:</strong> <span th:text="${serviceName}">catalog-service</span></p>
+    <p><strong>Status:</strong> <span th:text="${status}">UP</span></p>
+    <p><strong>Timestamp:</strong> <span th:text="${timestamp}">-</span></p>
+</main>
+</body>
+</html>
