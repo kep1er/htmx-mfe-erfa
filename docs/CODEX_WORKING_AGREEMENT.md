@@ -81,6 +81,7 @@ At the end of every prompt/task:
    - `[CODEX HANDOFF START]`
    - `[CODEX HANDOFF END]`
 3) Required sections inside the handoff block (in order):
+   - Handoff file: `<path>`
    - Session / Goal
    - What changed
    - Commands to run (build/run/test)
@@ -92,6 +93,7 @@ At the end of every prompt/task:
    - Suggested next prompt (single step)
 4) Keep handoff blocks easy to copy (plain Markdown, no nested structures).
 5) Start from `docs/codex/TEMPLATE.md` unless the user asks for a custom format.
+6) If the dated handoff file is missing, the task is incomplete and must not be committed.
 
 ## Clean Working Tree Rule (Required)
 - Before commit, run `git status` and confirm only scoped task files are staged.
@@ -106,6 +108,7 @@ Final chat response must use this order:
 [USER NOTES END]
 
 [CODEX HANDOFF START]
+Handoff file: docs/codex/YYYY-MM-DD_<slug>.md
 Session: YYYY-MM-DD - <slug>
 Goal:
 - ...

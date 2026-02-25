@@ -24,9 +24,11 @@
 - [x] Add Node-based one-command E2E runner (`npm run e2e:all`)
 - [x] Add Codex handoff artifact rules in `docs/CODEX_WORKING_AGREEMENT.md`
 - [x] Add `docs/codex/TEMPLATE.md` for copy-ready session handoffs
+- [x] Backfill missing dated handoff artifact `docs/codex/2026-02-25_codex-handoff-artifact-rules.md`
+- [x] Harden handoff rules: missing dated handoff file means task is incomplete / no commit
 
 ## Next (Do Not Implement Yet)
-- [ ] Use `docs/codex/TEMPLATE.md` to create a dated handoff file for the next session (`docs/codex/YYYY-MM-DD_<slug>.md`)
+- [ ] For each new session, create `docs/codex/YYYY-MM-DD_<slug>.md` before commit and include `Handoff file: <path>` in final handoff
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 

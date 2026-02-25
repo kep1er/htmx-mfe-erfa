@@ -3,6 +3,7 @@
 [USER NOTES END]
 
 [CODEX HANDOFF START]
+Handoff file: docs/codex/YYYY-MM-DD_<slug>.md
 Session: YYYY-MM-DD - <slug>
 Goal:
 - ...

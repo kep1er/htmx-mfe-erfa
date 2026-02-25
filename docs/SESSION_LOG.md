@@ -193,3 +193,30 @@
 
 **Suggested Next Step**
 - Add one dated handoff file in `docs/codex/` for the next feature prompt and enforce using the template.
+
+### 2026-02-25 - Session 6
+**Goal**
+- Backfill the missing dated Codex handoff artifact file and harden rules so it cannot be skipped.
+
+**Implemented**
+- Backfilled `docs/codex/2026-02-25_codex-handoff-artifact-rules.md` with the prior session handoff content using required delimiters.
+- Updated `docs/CODEX_WORKING_AGREEMENT.md` to enforce:
+  - missing dated handoff file means task is incomplete and must not be committed
+  - required `Handoff file: <path>` line in final handoff block
+- Updated `docs/codex/TEMPLATE.md` to include `Handoff file: ...`.
+- Updated `docs/TODO.md` for completion and next-step tracking.
+
+**Decisions / Assumptions**
+- Kept this session documentation-only (no feature/runtime changes).
+
+**Known Issues / Follow-ups**
+- None in scope.
+
+**Verification**
+- Commands run:
+    - `git status --short` (pre-commit scoping check)
+- Manual checks:
+    - Confirmed backfilled file exists at the required dated path and uses required delimiters.
+
+**Suggested Next Step**
+- Enforce a per-session checklist item in prompts: create handoff file before commit and verify path in final response.
