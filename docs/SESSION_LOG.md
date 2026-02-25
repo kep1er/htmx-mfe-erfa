@@ -306,3 +306,32 @@
 
 **Suggested Next Step**
 - Add a tiny convenience script to write the final handoff text to `docs/codex/LATEST.md` after each task.
+
+### 2026-02-25 - Session 10
+**Goal**
+- Tighten handoff rules with fixed section order and require writing `docs/codex/LATEST.md` even on task failure.
+
+**Implemented**
+- Replaced the `Codex Handoff Copy (Required)` section in `docs/CODEX_WORKING_AGREEMENT.md` with a stricter version that:
+  - enforces `[HANDOFF START]` / `[HANDOFF END]`
+  - defines exact section order
+  - requires overwriting `docs/codex/LATEST.md` with the same handoff text even on failure/blockers
+  - keeps plain text paths only
+  - keeps `docs/codex/LATEST.md` out of commits
+- Updated `docs/TODO.md` to track this documentation hardening.
+
+**Decisions / Assumptions**
+- Keep this as a docs-only change; no feature/runtime changes.
+
+**Known Issues / Follow-ups**
+- `docs/codex/LATEST.md` remains a local working file and should stay uncommitted.
+
+**Verification**
+- Commands run:
+    - `git status --short`
+    - `git diff --cached --name-only`
+- Manual checks:
+    - Confirmed handoff rule now defines a strict section order and failure-path requirement.
+
+**Suggested Next Step**
+- Add an optional local script to auto-generate the handoff skeleton with the required section order.

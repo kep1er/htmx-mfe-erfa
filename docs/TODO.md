@@ -30,9 +30,10 @@
 - [x] Make `docs/codex/LATEST.md` canonical with full USER NOTES + CODEX HANDOFF payload
 - [x] Add strict staged-file verification rule for `docs/codex/LATEST.md` before commit
 - [x] Simplify handoff workflow: local `docs/codex/LATEST.md` copy helper and no commit requirement
+- [x] Enforce fixed handoff delimiters/section order and require writing `docs/codex/LATEST.md` even on failure
 
 ## Next (Do Not Implement Yet)
-- [ ] Add a tiny helper command/script to update `docs/codex/LATEST.md` from the final handoff text
+- [ ] Add a tiny helper command/script to generate the required handoff section order and write `docs/codex/LATEST.md`
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 

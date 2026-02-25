@@ -75,8 +75,27 @@ Update:
 
 ## Codex Handoff Copy (Required)
 
-At end of every task, paste the handoff in chat and overwrite `docs/codex/LATEST.md` with the same content; do not commit `LATEST.md`.
-- In handoff text, use plain text paths only (no local `C:\...` hyperlinks).
+At end of every task:
+
+1) Output the final handoff in chat wrapped with these exact delimiters:
+   - `[HANDOFF START]`
+   - `[HANDOFF END]`
+
+2) Use this exact section order:
+   - `Session: YYYY-MM-DD - <slug>`
+   - `Goal:`
+   - `What changed:`
+   - `Commands:`
+   - `Verification:`
+   - `Commit:` (hash + message) OR `No commit`
+   - `Files in commit:`
+   - `Notes:`
+
+3) Overwrite `docs/codex/LATEST.md` with the exact same handoff text as chat (including delimiters and section order).
+   - This is required even if the task fails, is blocked, or tests cannot run.
+
+4) Use plain text paths only (no local hyperlinks like `C:\...`).
+5) Do not commit `docs/codex/LATEST.md`.
 
 ## Clean Working Tree Rule (Required)
 - Before commit, run `git status` and confirm only scoped task files are staged.
