@@ -76,6 +76,7 @@ Update:
 ## Codex Handoff Copy (Required)
 
 At end of every task, paste the handoff in chat and overwrite `docs/codex/LATEST.md` with the same content; do not commit `LATEST.md`.
+- In handoff text, use plain text paths only (no local `C:\...` hyperlinks).
 
 ## Clean Working Tree Rule (Required)
 - Before commit, run `git status` and confirm only scoped task files are staged.
