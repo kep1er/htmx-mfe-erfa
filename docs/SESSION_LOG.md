@@ -59,3 +59,37 @@
 
 **Suggested Next Step**
 - Implement first real catalog htmx vertical slice: `/catalog/fragments/products` filtering/search interaction from server-rendered Thymeleaf.
+
+### 2026-02-25 - Session 2
+**Goal**
+- Add minimal Playwright E2E foundation and enforce commit-per-prompt workflow rules.
+
+**Implemented**
+- Updated `docs/CODEX_WORKING_AGREEMENT.md` Git rules with explicit one-prompt-one-commit + conventional commit requirements.
+- Added standalone Playwright package under `tests/e2e` (no npm workspaces).
+- Added Playwright config (`playwright.config.ts`) with Chromium project and HTML report output.
+- Added smoke tests for:
+  - shell title
+  - `shop-badge[label="Bootstrap Step 1"]`
+  - dynamic replacement of loading placeholders for `#catalog-health`, `#order-health`, and catalog products fragment area
+  - direct HTTP status checks for `/catalog/health` and `/orders/health`
+- Updated `README.md` with exact Playwright commands for Windows and cross-platform usage.
+
+**Decisions / Assumptions**
+- Keep E2E runner isolated in `tests/e2e` to avoid monorepo tooling expansion.
+- Target Chromium only for initial smoke coverage.
+- Smoke tests assume stack is already running at `http://localhost:8080`.
+
+**Known Issues / Follow-ups**
+- End-to-end execution depends on local runtime prerequisites (Maven services + nginx/postgres).
+
+**Verification**
+- Commands run:
+    - `npm install` in `tests/e2e`
+    - `npm run install:browsers` in `tests/e2e`
+    - `npm test -- --list` in `tests/e2e`
+- Manual checks:
+    - Not executed in this session (browser-based validation depends on running services).
+
+**Suggested Next Step**
+- Add one CI workflow job that starts the local stack and runs `tests/e2e` smoke tests headlessly.

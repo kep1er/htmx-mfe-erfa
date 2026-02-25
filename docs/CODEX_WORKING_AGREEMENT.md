@@ -61,16 +61,12 @@ Update:
 - `docs/DECISIONS.md` (only if a design/technical choice was made)
 
 ## Git / Commit Rules
-- Default commit granularity: **one prompt/task = one commit**
-- If a task contains multiple independent runnable milestones, split into multiple commits
-- Commit only after completing the scoped task and performing the requested verification steps (or documenting why verification could not be run)
-- Use clear commit messages (prefer Conventional Commits), e.g.:
-   - `feat(catalog): add htmx product filter fragment`
-   - `chore(web): add nginx proxy route for catalog fragments`
-   - `test(e2e): add playwright smoke test for shell load`
+- Default: **one prompt/task = one commit**
+- Use Conventional Commit messages with these types by default: `feat`, `fix`, `chore`, `test`
+- Commit only after the scoped task is runnable, or after documenting exactly why verification could not be completed
 - Do not bundle unrelated changes into the same commit
-- At the end of each session, include the commit hash(es) in the handoff summary (if commits were created)
-- If git is unavailable in the environment, provide the exact commit command(s) and message(s) to run manually
+- At the end of each session, include the commit hash(es) in the handoff summary
+- If git is unavailable in the environment, provide exact commit command(s) and message(s) to run manually
 
 ## Response / Handoff Format (at end of each session)
 Provide:

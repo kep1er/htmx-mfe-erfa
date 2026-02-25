@@ -48,6 +48,33 @@ Demo webshop monorepo with:
    ```
 5. Open `http://localhost:8080`.
 
+## E2E Smoke Tests (Playwright)
+Run these only after the app stack is up (`nginx`, `catalog-service`, `order-service`).
+
+### Windows (PowerShell)
+```powershell
+cd tests/e2e
+npm install
+npm run install:browsers
+npm test
+npm run report
+```
+
+### Cross-Platform (bash/zsh/sh)
+```bash
+cd tests/e2e
+npm install
+npm run install:browsers
+npm test
+npm run report
+```
+
+### Optional: Headed Mode
+```bash
+cd tests/e2e
+npm run test:headed
+```
+
 ## Quick Verification
 - Nginx shell: `http://localhost:8080`
 - Catalog health JSON: `http://localhost:8080/catalog/health`

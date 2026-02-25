@@ -13,11 +13,15 @@
 - [x] Add `docker-compose.yml` for nginx + postgres (apps optional if simple)
 - [x] Add `README.md` with exact run instructions
 - [x] Update docs (`ARCHITECTURE`, `DECISIONS`, `SESSION_LOG`, `TODO`)
+- [x] Add standalone Playwright package under `tests/e2e`
+- [x] Add minimal Playwright config + smoke tests for shell and health endpoints
+- [x] Add E2E run/install/report commands to `README.md`
+- [x] Update `CODEX_WORKING_AGREEMENT.md` with commit-per-prompt Git workflow rules
 
 ## Next (Do Not Implement Yet)
-- [ ] Add first interactive htmx behavior in catalog (e.g., product filter input hitting a Thymeleaf fragment endpoint)
-- [ ] Add minimal in-memory add-to-cart endpoint in `order-service` (still no persistence)
-- [ ] Wire one end-to-end htmx action from catalog item to cart refresh fragment
+- [ ] Add a lightweight script to start required services and run `tests/e2e` smoke tests in one command
+- [ ] Add CI workflow to run Playwright smoke tests on push/PR
+- [ ] Implement one interactive catalog filter htmx slice and extend smoke tests for it
 
 ## Later
 - [ ] Persist cart/order data (if desired)
