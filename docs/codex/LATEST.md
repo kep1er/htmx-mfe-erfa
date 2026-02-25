@@ -1,18 +1,14 @@
-[USER NOTES START]
-- Optional notes from the user (environment state, what is already running, observed errors, etc.)
-[USER NOTES END]
-
 [CODEX HANDOFF START]
 Handoff file: docs/codex/LATEST.md
 Session: YYYY-MM-DD - <slug>
 Goal:
-- ...
+- Placeholder handoff for next session update.
 
 What changed:
-- ...
+- Replace this section with actual session changes.
 
 Commands to run:
-- ...
+- Add relevant build/run/test commands.
 
 Verification performed:
 - Commands run: ...
@@ -22,7 +18,7 @@ Commit hash(es):
 - ...
 
 Working tree status:
-- `git status --short` output summary
+- ...
 
 Changed files:
 - ...

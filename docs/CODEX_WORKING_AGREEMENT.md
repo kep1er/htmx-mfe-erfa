@@ -74,15 +74,20 @@ Update:
 - If git is unavailable in the environment, provide exact commit command(s) and message(s) to run manually
 
 ## Codex Handoff Artifact (Required)
+
 At the end of every prompt/task:
-1) Create or update a handoff file under `docs/codex/` named:
-   `YYYY-MM-DD_<slug>.md`
-2) Use the exact delimiter format:
+
+1) Overwrite this file with the final handoff summary:
+   - `docs/codex/LATEST.md`
+
+2) The handoff content in `docs/codex/LATEST.md` must be wrapped with the exact delimiters:
    - `[CODEX HANDOFF START]`
    - `[CODEX HANDOFF END]`
+
 3) Required sections inside the handoff block (in order):
-   - Handoff file: `<path>`
-   - Session / Goal
+   - Handoff file: `docs/codex/LATEST.md`
+   - Session: `YYYY-MM-DD - <slug>`
+   - Goal
    - What changed
    - Commands to run (build/run/test)
    - Verification performed (what was actually run)
@@ -91,9 +96,10 @@ At the end of every prompt/task:
    - Changed files
    - Known issues / follow-ups
    - Suggested next prompt (single step)
-4) Keep handoff blocks easy to copy (plain Markdown, no nested structures).
-5) Start from `docs/codex/TEMPLATE.md` unless the user asks for a custom format.
-6) If the dated handoff file is missing, the task is incomplete and must not be committed.
+
+4) In the final chat response, paste the same handoff block (same content as `docs/codex/LATEST.md`) using the Standard Chat Header.
+
+5) If `docs/codex/LATEST.md` is not updated, the task is incomplete and must not be committed.
 
 ## Clean Working Tree Rule (Required)
 - Before commit, run `git status` and confirm only scoped task files are staged.
@@ -108,7 +114,7 @@ Final chat response must use this order:
 [USER NOTES END]
 
 [CODEX HANDOFF START]
-Handoff file: docs/codex/YYYY-MM-DD_<slug>.md
+Handoff file: docs/codex/LATEST.md
 Session: YYYY-MM-DD - <slug>
 Goal:
 - ...

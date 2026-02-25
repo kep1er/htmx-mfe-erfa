@@ -26,9 +26,10 @@
 - [x] Add `docs/codex/TEMPLATE.md` for copy-ready session handoffs
 - [x] Backfill missing dated handoff artifact `docs/codex/2026-02-25_codex-handoff-artifact-rules.md`
 - [x] Harden handoff rules: missing dated handoff file means task is incomplete / no commit
+- [x] Simplify handoff artifacts to single file `docs/codex/LATEST.md`
 
 ## Next (Do Not Implement Yet)
-- [ ] For each new session, create `docs/codex/YYYY-MM-DD_<slug>.md` before commit and include `Handoff file: <path>` in final handoff
+- [ ] For each new session, update `docs/codex/LATEST.md` before commit and include `Handoff file: docs/codex/LATEST.md` in final handoff
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 
