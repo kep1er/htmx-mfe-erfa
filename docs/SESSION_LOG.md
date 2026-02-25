@@ -93,3 +93,32 @@
 
 **Suggested Next Step**
 - Add one CI workflow job that starts the local stack and runs `tests/e2e` smoke tests headlessly.
+
+### 2026-02-25 - Session 3
+**Goal**
+- Improve Playwright E2E reliability with a fast preflight stack check.
+
+**Implemented**
+- Added `tests/e2e/global-setup.ts` to probe `http://localhost:8080` with retry (~15s total).
+- Wired `globalSetup` into `tests/e2e/playwright.config.ts`.
+- Added fail-fast error message with exact startup commands:
+  - `docker compose up -d postgres nginx`
+  - `cd apps/catalog-service && mvn spring-boot:run`
+  - `cd apps/order-service && mvn spring-boot:run`
+- Updated `README.md` E2E section with a short "Prerequisites / Start Stack" snippet.
+
+**Decisions / Assumptions**
+- Preflight checks only nginx shell reachability at `http://localhost:8080`; deeper route behavior remains covered by existing smoke tests.
+- Retry window set to 15 seconds to stay within the requested 10-20 second range.
+
+**Known Issues / Follow-ups**
+- If stack is stopped, test run exits before executing specs (intentional behavior).
+
+**Verification**
+- Commands run:
+    - `npm test` in `tests/e2e`
+- Manual checks:
+    - Confirmed fast failure and error text includes startup commands when stack is not running.
+
+**Suggested Next Step**
+- Add a single helper script to start the stack and then run Playwright smoke tests.

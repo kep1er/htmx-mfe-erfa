@@ -51,6 +51,13 @@ Demo webshop monorepo with:
 ## E2E Smoke Tests (Playwright)
 Run these only after the app stack is up (`nginx`, `catalog-service`, `order-service`).
 
+### Prerequisites / Start Stack
+```bash
+docker compose up -d postgres nginx
+cd apps/catalog-service && mvn spring-boot:run
+cd apps/order-service && mvn spring-boot:run
+```
+
 ### Windows (PowerShell)
 ```powershell
 cd tests/e2e

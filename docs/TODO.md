@@ -17,10 +17,12 @@
 - [x] Add minimal Playwright config + smoke tests for shell and health endpoints
 - [x] Add E2E run/install/report commands to `README.md`
 - [x] Update `CODEX_WORKING_AGREEMENT.md` with commit-per-prompt Git workflow rules
+- [x] Add Playwright preflight stack check (global setup with fast fail message)
+- [x] Add README "Prerequisites / Start Stack" snippet for E2E
 
 ## Next (Do Not Implement Yet)
 - [ ] Add a lightweight script to start required services and run `tests/e2e` smoke tests in one command
-- [ ] Add CI workflow to run Playwright smoke tests on push/PR
+- [ ] Improve preflight to optionally validate `/catalog/health` and `/orders/health` before specs run
 - [ ] Implement one interactive catalog filter htmx slice and extend smoke tests for it
 
 ## Later
