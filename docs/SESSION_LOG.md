@@ -163,3 +163,33 @@
 
 **Suggested Next Step**
 - Add container healthchecks for `catalog-service` and `order-service` and tighten compose dependency readiness.
+
+### 2026-02-25 - Session 5
+**Goal**
+- Introduce a repository handoff artifact format so each session summary is saved and easy to copy.
+
+**Implemented**
+- Updated `docs/CODEX_WORKING_AGREEMENT.md` with:
+  - required handoff filename pattern `docs/codex/YYYY-MM-DD_<slug>.md`
+  - required delimiter format `[CODEX HANDOFF START]` / `[CODEX HANDOFF END]`
+  - required section order
+  - clean working tree rule before/after commit
+  - required standard chat header with `[USER NOTES START] ... [USER NOTES END]`
+- Added `docs/codex/TEMPLATE.md` with the standardized copy-ready handoff structure.
+- Updated `docs/TODO.md` to track completion and next small steps for handoff adoption.
+
+**Decisions / Assumptions**
+- Keep handoff format minimal Markdown-only for copy/paste reliability.
+- Do not add feature/code changes in this session.
+
+**Known Issues / Follow-ups**
+- None in scope; this session was documentation-only.
+
+**Verification**
+- Commands run:
+    - `git status --short` (pre-commit scoping check)
+- Manual checks:
+    - Confirmed new template path and agreement sections are present and aligned.
+
+**Suggested Next Step**
+- Add one dated handoff file in `docs/codex/` for the next feature prompt and enforce using the template.

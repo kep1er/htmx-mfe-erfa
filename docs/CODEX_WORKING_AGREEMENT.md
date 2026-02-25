@@ -54,6 +54,11 @@ This repository is an example webshop monorepo used to demonstrate:
 - PostgreSQL + Flyway for persistence (catalog first)
 - Demo-focused implementation (not production-hardening yet)
 
+## Test Execution Rule
+- Before running E2E tests, verify the stack is reachable (preflight).
+- If the stack is not running, do not execute E2E tests. Instead, document the required startup commands.
+- E2E tests should fail fast with a clear message when prerequisites are not met.
+
 ## Documentation Updates Required After Each Session
 Update:
 - `docs/SESSION_LOG.md` (what changed, assumptions, issues)
@@ -68,10 +73,64 @@ Update:
 - At the end of each session, include the commit hash(es) in the handoff summary
 - If git is unavailable in the environment, provide exact commit command(s) and message(s) to run manually
 
-## Response / Handoff Format (at end of each session)
-Provide:
-- what was done
-- files changed
-- exact run/test commands
-- manual verification steps
-- suggested next prompt (single small step only)
+## Codex Handoff Artifact (Required)
+At the end of every prompt/task:
+1) Create or update a handoff file under `docs/codex/` named:
+   `YYYY-MM-DD_<slug>.md`
+2) Use the exact delimiter format:
+   - `[CODEX HANDOFF START]`
+   - `[CODEX HANDOFF END]`
+3) Required sections inside the handoff block (in order):
+   - Session / Goal
+   - What changed
+   - Commands to run (build/run/test)
+   - Verification performed (what was actually run)
+   - Commit hash(es)
+   - Working tree status
+   - Changed files
+   - Known issues / follow-ups
+   - Suggested next prompt (single step)
+4) Keep handoff blocks easy to copy (plain Markdown, no nested structures).
+5) Start from `docs/codex/TEMPLATE.md` unless the user asks for a custom format.
+
+## Clean Working Tree Rule (Required)
+- Before commit, run `git status` and confirm only scoped task files are staged.
+- Do not include unrelated changes in the commit.
+- After commit, working tree should be clean. If unrelated pre-existing changes remain, leave them uncommitted and list them in the handoff.
+
+## Standard Chat Header (Required)
+Final chat response must use this order:
+
+[USER NOTES START]
+- optional user notes / environment observations
+[USER NOTES END]
+
+[CODEX HANDOFF START]
+Session: YYYY-MM-DD - <slug>
+Goal:
+- ...
+
+What changed:
+- ...
+
+Commands to run:
+- ...
+
+Verification performed:
+- ...
+
+Commit hash(es):
+- ...
+
+Working tree status:
+- ...
+
+Changed files:
+- ...
+
+Known issues / follow-ups:
+- ...
+
+Suggested next prompt:
+- ...
+[CODEX HANDOFF END]

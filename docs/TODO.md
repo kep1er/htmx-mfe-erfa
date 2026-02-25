@@ -22,11 +22,13 @@
 - [x] Containerize `catalog-service` and `order-service` with multi-stage Dockerfiles
 - [x] Run full stack in `docker-compose.yml` (postgres + both services + nginx)
 - [x] Add Node-based one-command E2E runner (`npm run e2e:all`)
+- [x] Add Codex handoff artifact rules in `docs/CODEX_WORKING_AGREEMENT.md`
+- [x] Add `docs/codex/TEMPLATE.md` for copy-ready session handoffs
 
 ## Next (Do Not Implement Yet)
+- [ ] Use `docs/codex/TEMPLATE.md` to create a dated handoff file for the next session (`docs/codex/YYYY-MM-DD_<slug>.md`)
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
-- [ ] Implement one interactive catalog filter htmx slice and extend smoke tests for it
 
 ## Later
 - [ ] Persist cart/order data (if desired)
