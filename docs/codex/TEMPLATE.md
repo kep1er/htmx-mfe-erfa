@@ -1,5 +1,5 @@
 [USER NOTES START]
-- Optional notes from the user (environment state, what is already running, observed errors, etc.)
+- optional user notes / environment observations
 [USER NOTES END]
 
 [CODEX HANDOFF START]

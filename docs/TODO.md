@@ -27,9 +27,11 @@
 - [x] Backfill missing dated handoff artifact `docs/codex/2026-02-25_codex-handoff-artifact-rules.md`
 - [x] Harden handoff rules: missing dated handoff file means task is incomplete / no commit
 - [x] Simplify handoff artifacts to single file `docs/codex/LATEST.md`
+- [x] Make `docs/codex/LATEST.md` canonical with full USER NOTES + CODEX HANDOFF payload
+- [x] Add strict staged-file verification rule for `docs/codex/LATEST.md` before commit
 
 ## Next (Do Not Implement Yet)
-- [ ] For each new session, update `docs/codex/LATEST.md` before commit and include `Handoff file: docs/codex/LATEST.md` in final handoff
+- [ ] Add a lightweight script to automate `git diff --cached --name-only` + delimiter checks for `docs/codex/LATEST.md`
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 

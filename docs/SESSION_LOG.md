@@ -246,3 +246,34 @@
 
 **Suggested Next Step**
 - Keep `docs/codex/LATEST.md` updated at the end of each prompt and mirror the same block in final chat response.
+
+### 2026-02-25 - Session 8
+**Goal**
+- Make `docs/codex/LATEST.md` the canonical copy source and add strict staged-file verification before commit.
+
+**Implemented**
+- Updated `docs/CODEX_WORKING_AGREEMENT.md` to require `docs/codex/LATEST.md` to contain both:
+  - `[USER NOTES START] ... [USER NOTES END]`
+  - `[CODEX HANDOFF START] ... [CODEX HANDOFF END]`
+- Added explicit requirement to start from `docs/codex/TEMPLATE.md`.
+- Added strict pre-commit checks:
+  - `git diff --cached --name-only` must include `docs/codex/LATEST.md`
+  - `docs/codex/LATEST.md` must contain both delimiter blocks
+- Overwrote `docs/codex/LATEST.md` with the prior session’s full final chat payload (USER NOTES + CODEX HANDOFF).
+- Updated `docs/codex/TEMPLATE.md` and `docs/TODO.md` to align with canonical LATEST workflow.
+
+**Decisions / Assumptions**
+- Keep this session documentation-only and avoid feature/runtime changes.
+
+**Known Issues / Follow-ups**
+- None in scope.
+
+**Verification**
+- Commands run:
+    - `git diff --cached --name-only`
+    - `Select-String` checks for delimiter markers in `docs/codex/LATEST.md`
+- Manual checks:
+    - Confirmed `docs/codex/LATEST.md` now contains both USER NOTES and CODEX HANDOFF blocks.
+
+**Suggested Next Step**
+- Add a simple pre-commit helper script to automate the LATEST.md staged-file + delimiter verification.

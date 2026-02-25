@@ -79,10 +79,11 @@ At the end of every prompt/task:
 
 1) Overwrite this file with the final handoff summary:
    - `docs/codex/LATEST.md`
+   - Start from `docs/codex/TEMPLATE.md`
 
-2) The handoff content in `docs/codex/LATEST.md` must be wrapped with the exact delimiters:
-   - `[CODEX HANDOFF START]`
-   - `[CODEX HANDOFF END]`
+2) `docs/codex/LATEST.md` must contain BOTH delimiter blocks:
+   - `[USER NOTES START]` ... `[USER NOTES END]`
+   - `[CODEX HANDOFF START]` ... `[CODEX HANDOFF END]`
 
 3) Required sections inside the handoff block (in order):
    - Handoff file: `docs/codex/LATEST.md`
@@ -97,9 +98,15 @@ At the end of every prompt/task:
    - Known issues / follow-ups
    - Suggested next prompt (single step)
 
-4) In the final chat response, paste the same handoff block (same content as `docs/codex/LATEST.md`) using the Standard Chat Header.
+4) In the final chat response, paste the exact same payload as `docs/codex/LATEST.md` (including both USER NOTES and CODEX HANDOFF blocks) using the Standard Chat Header.
 
 5) If `docs/codex/LATEST.md` is not updated, the task is incomplete and must not be committed.
+
+## Pre-Commit Verification (Strict)
+- `git diff --cached --name-only` must include `docs/codex/LATEST.md`.
+- `docs/codex/LATEST.md` must contain both delimiter blocks:
+  - `[USER NOTES START]` ... `[USER NOTES END]`
+  - `[CODEX HANDOFF START]` ... `[CODEX HANDOFF END]`
 
 ## Clean Working Tree Rule (Required)
 - Before commit, run `git status` and confirm only scoped task files are staged.
