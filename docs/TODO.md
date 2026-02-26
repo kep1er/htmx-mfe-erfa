@@ -65,6 +65,7 @@
 
 ## Next (Do Not Implement Yet)
 - [x] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
+- [x] Install curl in Spring runtime images so compose curl-based app healthchecks pass reliably
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile)
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs

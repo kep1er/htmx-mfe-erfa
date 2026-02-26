@@ -861,3 +861,33 @@
 
 **Suggested Next Step**
 - Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).
+
+### 2026-02-26 - Session 25
+**Goal**
+- Fix compose healthchecks by ensuring curl exists in Spring Boot runtime images while keeping compose app checks curl-based.
+
+**Implemented**
+- Updated `apps/catalog-service/Dockerfile` runtime stage:
+  - installs curl via `apt-get`
+- Updated `apps/order-service/Dockerfile` runtime stage:
+  - installs curl via `apt-get`
+- Kept `docker-compose.yml` app healthchecks curl-based:
+  - `catalog-service`: `curl -fsS http://localhost:8081/catalog/health`
+  - `order-service`: `curl -fsS http://localhost:8082/orders/health`
+
+**Decisions / Assumptions**
+- `eclipse-temurin:25-jre` runtime image supports apt package installation, so adding curl there is the smallest targeted fix.
+
+**Known Issues / Follow-ups**
+- None in scope.
+
+**Verification**
+- Commands run:
+  - `docker compose --profile full up -d --build`
+  - `docker compose --profile full ps`
+  - `docker compose --profile full down`
+- Manual checks:
+  - Confirmed `catalog-service` and `order-service` reached `healthy` state using curl-based healthchecks.
+
+**Suggested Next Step**
+- Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).

@@ -106,3 +106,8 @@
 - **Decision**: Move shell UX to route-like htmx views with shared top navigation and `#app-main` content swaps for `/`, `/cart`, and `/health`
 - **Why**: Simplify the shell into one persistent layout and make catalog/cart/health view changes explicit without changing service route ownership
 - **Impact**: `nginx` shell now owns view composition/routing state; catalog and order services continue owning their existing fragment endpoints, including catalog-owned item summary and order-owned cart composition
+
+- **Date**: 2026-02-26
+- **Decision**: Keep compose app healthchecks curl-based and install `curl` in both Spring runtime images
+- **Why**: HTTP checks are clearer than prior shell `/dev/tcp` probes and now work reliably once runtime images include curl
+- **Impact**: `catalog-service` and `order-service` Docker runtime stages add curl; compose healthchecks continue using `curl -fsS` against `/catalog/health` and `/orders/health`

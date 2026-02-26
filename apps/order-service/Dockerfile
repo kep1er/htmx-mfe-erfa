@@ -7,6 +7,9 @@ COPY src ./src
 RUN mvn -B -DskipTests package
 
 FROM eclipse-temurin:25-jre AS runtime
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY --from=build /workspace/target/*.jar app.jar
