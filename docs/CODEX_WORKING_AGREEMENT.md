@@ -1,13 +1,16 @@
 # CODEX Working Agreement
 
 ## Purpose
+
 This repository is an example webshop monorepo used to demonstrate:
+
 - Spring Boot SSR with Thymeleaf fragments
 - htmx-driven interactions
 - shared native Web Components built with Lit
 - Nginx as frontend shell/static server/reverse proxy
 
 ## Core Rules (Always Follow)
+
 1. Read these files before making changes:
     - `docs/ARCHITECTURE.md`
     - `docs/DECISIONS.md`
@@ -46,6 +49,7 @@ This repository is an example webshop monorepo used to demonstrate:
 10. Do not refactor unrelated code.
 
 ## Technology Intent
+
 - Monorepo with 2 Spring Boot apps + 1 Nginx server
 - htmx for partial page updates
 - Thymeleaf for server-rendered HTML fragments
@@ -55,17 +59,21 @@ This repository is an example webshop monorepo used to demonstrate:
 - Demo-focused implementation (not production-hardening yet)
 
 ## Test Execution Rule
+
 - Before running E2E tests, verify the stack is reachable (preflight).
 - If the stack is not running, do not execute E2E tests. Instead, document the required startup commands.
 - E2E tests should fail fast with a clear message when prerequisites are not met.
 
 ## Documentation Updates Required After Each Session
+
 Update:
+
 - `docs/SESSION_LOG.md` (what changed, assumptions, issues)
 - `docs/TODO.md` (completed items + next small steps)
 - `docs/DECISIONS.md` (only if a design/technical choice was made)
 
 ## Git / Commit Rules
+
 - Default: **one prompt/task = one commit**
 - Use Conventional Commit messages with these types by default: `feat`, `fix`, `chore`, `test`
 - Commit only after the scoped task is runnable, or after documenting exactly why verification could not be completed
@@ -73,31 +81,50 @@ Update:
 - At the end of each session, include the commit hash(es) in the handoff summary
 - If git is unavailable in the environment, provide exact commit command(s) and message(s) to run manually
 
+## .gitignore Discipline (Required)
+
+Before staging/committing any changes:
+
+1) Read `.gitignore` and ensure no ignored files are staged.
+2) Run:
+    - `git status --short`
+    - `git status --ignored --short`
+3) If a generated/build output is being committed, either:
+    - update `.gitignore` to ignore it, and
+    - if it was already tracked, stop tracking it with `git rm --cached <path>` (keeps the file locally).
+4) When introducing a new tool that produces build output (Tailwind, Playwright, Lit build, etc.), proactively propose
+   `.gitignore` updates as part of the task.
+5) Keep `.run/` committed (do not add it to `.gitignore`), so teammates can run configs easily.
+
 ## Codex Handoff Copy (Required)
 
 At end of every task:
 
 1) Output the final handoff in chat wrapped with these exact delimiters:
-   - `[HANDOFF START]`
-   - `[HANDOFF END]`
+    - `[HANDOFF START]`
+    - `[HANDOFF END]`
 
 2) Use this exact section order:
-   - `Session: YYYY-MM-DD - <slug>`
-   - `Goal:`
-   - `What changed:`
-   - `Commands:`
-   - `Verification:`
-   - `Commit:` (hash + message) OR `No commit`
-   - `Files in commit:`
-   - `Notes:`
+    - `Session: YYYY-MM-DD - <slug>`
+    - `Goal:`
+    - `What changed:`
+    - `Commands:`
+    - `Verification:`
+    - `Commit:` (hash + message) OR `No commit`
+    - `Files in commit:`
+    - `Notes:` (must never include instructions; only results)
+        - `Unrelated local changes:` list file names, or `None`
 
 3) Overwrite `docs/codex/LATEST.md` with the exact same handoff text as chat (including delimiters and section order).
-   - This is required even if the task fails, is blocked, or tests cannot run.
+    - This is required even if the task fails, is blocked, or tests cannot run.
 
 4) Use plain text paths only (no local hyperlinks like `C:\...`).
 5) Do not commit `docs/codex/LATEST.md`.
 
 ## Clean Working Tree Rule (Required)
+
 - Before commit, run `git status` and confirm only scoped task files are staged.
 - Do not include unrelated changes in the commit.
-- After commit, working tree should be clean. If unrelated pre-existing changes remain, leave them uncommitted and list them in the handoff.
+- After commit, working tree should be clean. If unrelated pre-existing changes remain, leave them uncommitted and list
+  them in the handoff.
+- Ensure that any docker containers started are shut down again.
