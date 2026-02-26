@@ -1,5 +1,8 @@
 # TODO
 
+## Recently Done
+- [x] Polish shell/catalog UI layout: aligned top bar, peer-based pill radios, responsive list/detail catalog view, and cohesive row-card action spacing.
+
 ## Next (Active)
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals.

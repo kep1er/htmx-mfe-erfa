@@ -937,3 +937,36 @@
 
 **Suggested Next Step**
 - Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).
+
+### 2026-02-26 - Session 27
+**Goal**
+- Polish shell + catalog UI alignment/layout while keeping all existing routes and behavior unchanged.
+
+**Implemented**
+- Updated `web/nginx/html/index.html` top bar to a cleaner left/center/right layout with consistent container spacing and action grouping (`Clear`, `Health`, `Cart`).
+- Switched top-bar rarity/category controls to native radios with `peer sr-only` inputs and styled pill labels (no visible radio circles).
+- Updated `apps/catalog-service/src/main/resources/templates/fragments/products.html` to a responsive list+detail grid (`1` column mobile, `2` columns on desktop) with `#catalog-detail` as the right-side panel.
+- Refined catalog list row cards so summary + actions are aligned and spaced consistently.
+- Updated `apps/catalog-service/src/main/resources/templates/fragments/item-summary.html` thumbnail fallback styling to remove the visible "No image" text block and keep a visual placeholder.
+- Updated `apps/catalog-service/src/main/resources/templates/fragments/item-detail.html` panel styling to fit the new right-column detail container cleanly.
+- Rebuilt Tailwind output locally for runtime styling.
+
+**Decisions / Assumptions**
+- No route, endpoint, fragment ID, or behavior contracts were changed.
+- Existing stable test hooks were preserved (`data-testid` selectors), so no Playwright selector refactor was required.
+
+**Known Issues / Follow-ups**
+- None in scope.
+
+**Verification**
+- Commands run:
+    - `npm run build` (in `web/tailwind`)
+    - `docker compose --profile full up -d --build`
+    - `cd tests/e2e && npm run e2e:all`
+    - `docker compose --profile full down`
+- Manual checks:
+    - Playwright smoke suite passed (`2 passed`) with catalog filtering, detail load, cart flow, and health checks.
+    - Compose full stack was shut down after verification.
+
+**Suggested Next Step**
+- Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).

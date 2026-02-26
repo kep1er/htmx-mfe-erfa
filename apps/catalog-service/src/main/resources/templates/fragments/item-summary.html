@@ -2,38 +2,41 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <article th:fragment="summary"
-         class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
+         class="flex min-w-0 items-start gap-4"
          data-testid="item-summary"
          th:attr="data-item-id=${item.id}">
-    <div class="flex items-start gap-3">
-        <div class="h-16 w-16 shrink-0 overflow-hidden rounded bg-slate-100">
-            <th:block th:if="${!#strings.isEmpty(item.image)}">
-                <img th:src="${item.image}"
-                     th:alt="${item.name}"
-                     class="h-full w-full object-cover"
-                     onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');"/>
-                <div class="hidden h-full w-full items-center justify-center bg-slate-200 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                    No image
-                </div>
-            </th:block>
-            <div th:if="${#strings.isEmpty(item.image)}"
-                 class="flex h-full w-full items-center justify-center bg-slate-200 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                No image
+    <div class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+        <th:block th:if="${!#strings.isEmpty(item.image)}">
+            <img th:src="${item.image}"
+                 th:alt="${item.name}"
+                 class="h-full w-full object-cover"
+                 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');"/>
+            <div class="hidden h-full w-full items-center justify-center bg-gradient-to-br from-slate-200 via-slate-100 to-slate-300">
+                <span class="h-6 w-6 rounded-full border border-slate-300 bg-white/70"></span>
             </div>
+        </th:block>
+        <div th:if="${#strings.isEmpty(item.image)}"
+             class="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-200 via-slate-100 to-slate-300">
+            <span class="h-6 w-6 rounded-full border border-slate-300 bg-white/70"></span>
         </div>
-        <div class="min-w-0">
-            <p class="font-semibold text-slate-900" th:text="${item.name}">Item Name</p>
-            <p class="text-sm text-slate-600">
-                <span th:text="${item.category}">Category</span>
-                <span> · </span>
-                <span class="uppercase tracking-wide" th:text="${item.rarity.value()}">common</span>
-            </p>
-            <p class="text-sm text-slate-600">
-                <span th:text="${'$' + #numbers.formatDecimal(item.price, 1, 2)}">$0.00</span>
-                <span> · Stock: </span>
-                <span th:text="${item.stock}">0</span>
+    </div>
+
+    <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-start gap-2">
+            <p class="truncate text-base font-semibold text-slate-900" th:text="${item.name}">Item Name</p>
+            <p class="inline-flex rounded-full border border-slate-300 bg-slate-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-600"
+               th:text="${item.rarity.value()}">
+                common
             </p>
         </div>
+        <p class="mt-1 text-sm text-slate-600" th:text="${item.category}">Category</p>
+        <p class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-600">
+            <span class="font-semibold text-slate-900" th:text="${'$' + #numbers.formatDecimal(item.price, 1, 2)}">$0.00</span>
+            <span class="text-slate-500">
+                Stock:
+                <span class="font-medium text-slate-700" th:text="${item.stock}">0</span>
+            </span>
+        </p>
     </div>
 </article>
 
