@@ -81,3 +81,8 @@
 - **Decision**: Model `MagicShopItem` rich arrays with JPA `@ElementCollection` tables and map dimensions/charges as embedded columns
 - **Why**: Keep persistence relational and PostgreSQL-friendly for this incremental step, avoiding JSONB complexity
 - **Impact**: Catalog now has normalized tables (`magic_shop_items` + collection tables) and simple API-ready mapping for upcoming item list/detail UI work
+
+- **Date**: 2026-02-26
+- **Decision**: Move catalog shell fragment contract from legacy `Product` to `MagicShopItem` and add detail fragment route `GET /catalog/fragments/items/{id}`
+- **Why**: Align UI rendering with new catalog domain while keeping htmx-driven incremental SSR flow
+- **Impact**: `/catalog/fragments/products` now renders `MagicShopItem` fields and add-to-cart posts `sku=item.id`; nginx route ownership remains unchanged under `/catalog/**`

@@ -1,6 +1,6 @@
 package com.example.catalog.web;
 
-import com.example.catalog.product.ProductRepository;
+import com.example.catalog.magic.MagicShopItemService;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,14 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class CatalogController {
 
-    private final ProductRepository productRepository;
+    private final MagicShopItemService magicShopItemService;
 
-    public CatalogController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public CatalogController(MagicShopItemService magicShopItemService) {
+        this.magicShopItemService = magicShopItemService;
     }
 
     @GetMapping(path = "/catalog/health", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,7 +47,13 @@ public class CatalogController {
 
     @GetMapping("/catalog/fragments/products")
     public String productFragment(Model model) {
-        model.addAttribute("products", productRepository.findAllByOrderByIdAsc());
+        model.addAttribute("items", magicShopItemService.listAll());
         return "fragments/products :: productList";
+    }
+
+    @GetMapping("/catalog/fragments/items/{id}")
+    public String itemDetailFragment(@PathVariable String id, Model model) {
+        model.addAttribute("item", magicShopItemService.getById(id).orElse(null));
+        return "fragments/item-detail :: detailCard";
     }
 }

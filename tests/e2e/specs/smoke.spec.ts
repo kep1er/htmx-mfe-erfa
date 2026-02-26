@@ -25,6 +25,16 @@ test("shell smoke checks", async ({ page }) => {
   await expect
     .poll(async () => (await catalogProducts.innerText()).trim())
     .not.toBe("Loading catalog products...");
+  await expect(catalogProducts).toContainText("Magical Items");
+
+  const detailButton = page.locator("button[data-item-id='itm_001']");
+  await expect(detailButton).toBeVisible();
+  await detailButton.click();
+
+  const catalogDetail = page.locator("#catalog-detail");
+  await expect(catalogDetail).toBeVisible();
+  await expect(catalogDetail).toContainText("Pocket Weather Jar (Mini)");
+  await expect(catalogDetail).toContainText(/Skywright/i);
 
   const cartFragment = page.locator("#cart-fragment");
   await expect(cartFragment).toBeVisible();

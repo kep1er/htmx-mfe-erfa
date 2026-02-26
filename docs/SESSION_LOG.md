@@ -522,3 +522,34 @@
 
 **Suggested Next Step**
 - Build the catalog page/fragment wiring for magical items and adapt the existing add-to-cart form fields without breaking F-001 flow.
+
+### 2026-02-26 - Session 16
+**Goal**
+- Switch catalog Thymeleaf fragments from legacy product model to `MagicShopItem`, add htmx-loaded rich item detail, and keep add-to-cart contract intact.
+
+**Implemented**
+- Updated `CatalogController` to load `/catalog/fragments/products` from `MagicShopItemService`.
+- Added new detail fragment endpoint: `GET /catalog/fragments/items/{id}`.
+- Updated catalog list fragment to render `MagicShopItem` fields (name/category/rarity/price/stock).
+- Kept add-to-cart integration with `order-service` intact by posting `sku=item.id` and `qty=1` to `/orders/cart/items`.
+- Added per-item "View details" htmx action targeting `#catalog-detail`.
+- Added new Thymeleaf fragment template `fragments/item-detail.html` for rich detail sections (description/lore/effects/materials/dimensions/warnings), rendered conditionally when present.
+- Updated nginx shell `index.html` with `#catalog-detail` container in catalog panel.
+- Extended Playwright smoke test to open details for `itm_001` and assert detail content, while still validating cart updates.
+
+**Decisions / Assumptions**
+- Detail route stays under existing `/catalog/**` ownership as `/catalog/fragments/items/{id}`.
+- Kept order-service contract unchanged (`sku` stays a string form field) and mapped it from `MagicShopItem.id`.
+
+**Known Issues / Follow-ups**
+- Unrelated local changes existed before this task (`docs/CODEX_WORKING_AGREEMENT.md`, `.run/`) and were intentionally left uncommitted.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile full up -d --build`
+    - `cd tests/e2e && npm run e2e:all`
+- Manual checks:
+    - Playwright smoke suite passed, including new detail-view assertions and add-to-cart cart update assertion.
+
+**Suggested Next Step**
+- Add a minimal catalog filter/search fragment interaction (htmx query parameter) over `MagicShopItem` list results.

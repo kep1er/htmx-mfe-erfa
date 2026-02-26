@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="detailCard" class="mt-4 rounded border p-4">
+    <h3 class="text-lg font-semibold">Item Details</h3>
+
+    <div class="mt-2 text-slate-600" th:if="${item == null}">
+        Select an item to view details.
+    </div>
+
+    <div class="mt-2 space-y-3" th:if="${item != null}">
+        <div>
+            <p class="text-base font-medium" th:text="${item.name}">Item Name</p>
+            <p class="text-sm text-slate-600" th:text="${item.description}" th:if="${!#strings.isEmpty(item.description)}">
+                Description
+            </p>
+        </div>
+
+        <section th:if="${!#strings.isEmpty(item.lore)}">
+            <h4 class="text-sm font-semibold uppercase text-slate-600">Lore</h4>
+            <p class="text-sm" th:text="${item.lore}">Lore text</p>
+        </section>
+
+        <section th:if="${!#lists.isEmpty(item.effects)}">
+            <h4 class="text-sm font-semibold uppercase text-slate-600">Effects</h4>
+            <ul class="list-disc space-y-1 pl-5 text-sm">
+                <li th:each="effect : ${item.effects}" th:text="${effect}">Effect</li>
+            </ul>
+        </section>
+
+        <section th:if="${!#lists.isEmpty(item.materials)}">
+            <h4 class="text-sm font-semibold uppercase text-slate-600">Materials</h4>
+            <ul class="list-disc space-y-1 pl-5 text-sm">
+                <li th:each="material : ${item.materials}" th:text="${material}">Material</li>
+            </ul>
+        </section>
+
+        <section th:if="${item.dimensions != null and (item.dimensions.lengthMm != null or item.dimensions.widthMm != null or item.dimensions.heightMm != null)}">
+            <h4 class="text-sm font-semibold uppercase text-slate-600">Dimensions (mm)</h4>
+            <p class="text-sm">
+                <span th:text="${item.dimensions.lengthMm != null ? item.dimensions.lengthMm : '-'}">0</span>
+                <span> x </span>
+                <span th:text="${item.dimensions.widthMm != null ? item.dimensions.widthMm : '-'}">0</span>
+                <span> x </span>
+                <span th:text="${item.dimensions.heightMm != null ? item.dimensions.heightMm : '-'}">0</span>
+            </p>
+        </section>
+
+        <section th:if="${!#lists.isEmpty(item.warnings)}">
+            <h4 class="text-sm font-semibold uppercase text-slate-600">Warnings</h4>
+            <ul class="list-disc space-y-1 pl-5 text-sm">
+                <li th:each="warning : ${item.warnings}" th:text="${warning}">Warning</li>
+            </ul>
+        </section>
+    </div>
+</section>
+</body>
+</html>

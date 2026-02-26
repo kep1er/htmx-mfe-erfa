@@ -41,15 +41,17 @@
 - [x] Add Tailwind watch service to compose `infra` profile
 - [x] Add `MagicShopItem` catalog domain (entity/repository/service) with Flyway V2 schema + seed data
 - [x] Add minimal catalog JSON endpoints for magic items (`/catalog/api/items`, `/catalog/api/items/{id}`)
+- [x] Switch catalog products fragment to `MagicShopItem` list rendering
+- [x] Add catalog rich detail fragment endpoint + Thymeleaf detail partial
+- [x] Keep add-to-cart contract intact with `sku=item.id` and verify via Playwright
 
 ## Next (Do Not Implement Yet)
-- [ ] Build catalog Thymeleaf fragment/page for magical items and wire to current shell
-- [ ] Adapt catalog add-to-cart forms to new item identifiers while keeping F-001 behavior intact
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add cart line remove/decrement action and endpoint in `order-service` fragment flow
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile)
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
+- [ ] Add catalog list filtering/search interaction (htmx + server-side query)
 
 ## Later
 - [ ] Persist cart/order data (if desired)
