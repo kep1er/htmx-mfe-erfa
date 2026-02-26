@@ -634,3 +634,33 @@
 
 **Suggested Next Step**
 - Re-run full `tests/e2e` once local host port `8082` is free.
+
+### 2026-02-26 - Session 19
+**Goal**
+- Ensure rarity/category selection applies catalog filtering even when search query is empty.
+
+**Implemented**
+- Updated `apps/catalog-service/src/main/resources/templates/fragments/products.html` filter form trigger:
+  - from `hx-trigger="keyup changed delay:300ms"`
+  - to `hx-trigger="keyup changed delay:300ms, change"`
+- This ensures select controls (`rarity`, `category`) trigger requests without requiring typing in `q`.
+- Updated `tests/e2e/specs/smoke.spec.ts`:
+  - added explicit response waits for rarity/category-only filter requests
+  - kept and stabilized search assertions by dispatching `change` event after filling search input
+  - preserved detail-view and add-to-cart checks.
+
+**Decisions / Assumptions**
+- No backend/filter-query changes required; issue was frontend htmx trigger coverage for select change events.
+
+**Known Issues / Follow-ups**
+- Unrelated local change in `docs/CODEX_WORKING_AGREEMENT.md` remains uncommitted.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile full up -d --build`
+    - `cd tests/e2e && npm test`
+- Manual checks:
+    - Playwright passed (`2 passed`) including filter-only selection behavior.
+
+**Suggested Next Step**
+- Add a dedicated Playwright test file for catalog filtering permutations to keep smoke test concise.

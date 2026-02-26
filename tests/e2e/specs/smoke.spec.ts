@@ -29,16 +29,48 @@ test("shell smoke checks", async ({ page }) => {
 
   const searchInput = page.locator("#catalog-search-input");
   const raritySelect = page.locator("#catalog-rarity-select");
+  const categorySelect = page.locator("#catalog-category-select");
   await expect(searchInput).toBeVisible();
   await expect(raritySelect).toBeVisible();
+  await expect(categorySelect).toBeVisible();
 
+  const rarityResponse = page.waitForResponse((response) => {
+    return (
+      response.url().includes("/catalog/fragments/products") &&
+      response.url().includes("rarity=uncommon") &&
+      response.status() === 200
+    );
+  });
+  await raritySelect.selectOption("uncommon");
+  await rarityResponse;
+  await expect(catalogProducts).toContainText(/uncommon/i);
+
+  const categoryOptions = categorySelect.locator("option");
+  const firstCategoryValue = await categoryOptions.nth(1).getAttribute("value");
+  expect(firstCategoryValue).not.toBeNull();
+  const categoryResponse = page.waitForResponse((response) => {
+    return (
+      response.url().includes("/catalog/fragments/products") &&
+      response.url().includes(`category=${encodeURIComponent(firstCategoryValue!)}`) &&
+      response.status() === 200
+    );
+  });
+  await raritySelect.selectOption("");
+  await categorySelect.selectOption(firstCategoryValue!);
+  await categoryResponse;
+  await expect(catalogProducts).toContainText(firstCategoryValue!);
+
+  await categorySelect.selectOption("");
   await searchInput.fill("Weather");
+  await searchInput.dispatchEvent("change");
   await expect(catalogProducts).toContainText("Pocket Weather Jar");
 
   await searchInput.fill("zzzz-no-such-item");
+  await searchInput.dispatchEvent("change");
   await expect(catalogProducts).toContainText("No magical items found for the current filters.");
 
   await searchInput.fill("Weather");
+  await searchInput.dispatchEvent("change");
   await raritySelect.selectOption("uncommon");
   await expect(catalogProducts).toContainText("Pocket Weather Jar");
 
