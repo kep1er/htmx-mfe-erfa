@@ -46,6 +46,11 @@ logs/
 **/*.tsbuildinfo
 
 ############################################
+# Generated assets (Tailwind output served by nginx)
+############################################
+web/nginx/assets/css/app.css
+
+############################################
 # Playwright
 ############################################
 **/playwright-report/
