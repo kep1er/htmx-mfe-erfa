@@ -93,8 +93,20 @@ services:
       - ./web/nginx/html:/usr/share/nginx/html:ro
       - ./web/nginx/assets:/usr/share/nginx/assets:ro
 
+  tailwind:
+    image: node:20-alpine
+    container_name: webshop-tailwind
+    profiles:
+      - infra
+    working_dir: /workspace/web/tailwind
+    command: sh -c "npm ci && npm run watch -- --poll"
+    volumes:
+      - ./:/workspace
+      - tailwind-node-modules:/workspace/web/tailwind/node_modules
+
 volumes:
   postgres-data:
+  tailwind-node-modules:
 
 networks:
   webshop-net:

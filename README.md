@@ -20,11 +20,12 @@ Demo webshop monorepo with:
 - Docker Desktop (or Docker Engine + Compose)
 
 ## Dev/Infra Mode (Docker infra + host-run Spring apps)
-Start only postgres + nginx in Docker:
+Start dev infra in Docker:
 
 ```bash
 docker compose --profile infra up -d
 ```
+This starts: `postgres`, `nginx-dev`, and the `tailwind` watcher.
 
 Run each Spring Boot app on host with the `dev` profile (Thymeleaf cache off + DevTools restart/livereload):
 

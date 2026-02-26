@@ -71,3 +71,8 @@
 - **Decision**: Implement cart write flow in `order-service` as in-memory SKU/qty lines with `POST /orders/cart/items` returning the cart Thymeleaf fragment
 - **Why**: Deliver the first cross-service htmx vertical slice with minimal domain complexity
 - **Impact**: Catalog fragment can post directly to `/orders/cart/items` and update `#cart-fragment` without page reload; cart state resets on service restart
+
+- **Date**: 2026-02-26
+- **Decision**: Run Tailwind watch in compose `infra` profile via dedicated `tailwind` service
+- **Why**: Remove manual Tailwind watch startup from local dev loop
+- **Impact**: `docker compose --profile infra up -d` now includes CSS watcher behavior and writes to `web/nginx/assets/css/app.css`

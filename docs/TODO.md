@@ -37,10 +37,13 @@
 - [x] Add `web/nginx/nginx.dev.conf` and update docs/commands for both runtime modes
 - [x] Implement F-001 add-to-cart cross-service flow with htmx (`/orders/cart/items` + cart fragment update)
 - [x] Extend Playwright smoke test to assert cart fragment changes after Add to cart
+- [x] Reconcile manual dev workflow updates (`nginx.dev` no-cache, dev Thymeleaf file prefix, README IntelliJ working dir note)
+- [x] Add Tailwind watch service to compose `infra` profile
 
 ## Next (Do Not Implement Yet)
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add cart line remove/decrement action and endpoint in `order-service` fragment flow
+- [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile)
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 

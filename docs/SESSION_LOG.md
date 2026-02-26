@@ -446,3 +446,36 @@
 
 **Suggested Next Step**
 - Add cart line remove/decrement endpoint and htmx action in cart fragment.
+
+### 2026-02-26 - Session 14
+**Goal**
+- Reconcile recent manual dev workflow changes and add Tailwind watcher to compose `infra` profile.
+
+**Implemented**
+- Reconciled manual dev changes into repo state:
+  - `web/nginx/nginx.dev.conf` now serves `/assets/` with no-cache headers for local iteration
+  - both app `application-dev.properties` use filesystem template prefix (`spring.thymeleaf.prefix=file:src/main/resources/templates/`)
+  - README now documents IntelliJ run configuration working directories per service app folder
+- Kept related manual UI/template sync updates together (cart fragment outerHTML swap alignment and regenerated Tailwind CSS output).
+- Added `tailwind` service to `docker-compose.yml` under `infra` profile:
+  - image `node:20-alpine`
+  - command `npm ci && npm run watch -- --poll`
+  - repo bind mount plus named volume `tailwind-node-modules`
+- Updated README dev instructions to clarify `docker compose --profile infra up -d` now starts `postgres`, `nginx-dev`, and `tailwind` watcher.
+
+**Decisions / Assumptions**
+- Keep Tailwind watcher as compose-managed infra in dev mode only (`infra` profile).
+- Use polling in watcher command for cross-platform file change reliability.
+
+**Known Issues / Follow-ups**
+- Existing unrelated local changes were present before this task and were left uncommitted.
+
+**Verification**
+- Commands run:
+    - `git status --short`
+    - `docker compose --profile infra config --services`
+- Manual checks:
+    - Confirmed infra service list includes `postgres`, `tailwind`, and `nginx-dev`.
+
+**Suggested Next Step**
+- Add `docker compose --profile infra logs -f tailwind` troubleshooting snippet to README.
