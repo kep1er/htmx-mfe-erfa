@@ -1,6 +1,7 @@
 # TODO
 
 ## Recently Done
+- [x] Fix infra Tailwind watcher container startup to create the CSS output directory and run watch in reliable polling mode.
 - [x] Polish shell/catalog UI layout: aligned top bar, peer-based pill radios, responsive list/detail catalog view, and cohesive row-card action spacing.
 - [x] Fix top-bar pill highlight bug so only the selected rarity/category radio pill is shown as active.
 - [x] Add top-bar cart badge with htmx event-bus refresh (`cart:changed`) and order-service cart-badge fragment endpoint.

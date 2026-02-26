@@ -107,7 +107,7 @@ services:
     profiles:
       - infra
     working_dir: /workspace/web/tailwind
-    command: sh -c "npm ci && npm run watch -- --poll"
+    command: sh -c "mkdir -p /workspace/web/nginx/assets/css && npm ci && npx tailwindcss -c tailwind.config.js -i input.css -o ../nginx/assets/css/app.css --watch=always --poll=1000"
     volumes:
       - ./:/workspace
       - tailwind-node-modules:/workspace/web/tailwind/node_modules

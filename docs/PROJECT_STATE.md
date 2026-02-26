@@ -47,4 +47,5 @@ Last updated: 2026-02-26
 - Port expectations: in `full`, app ports `8081`/`8082` are not published to host; use nginx on `8080`.
 - Asset caching: use `nginx.dev.conf` (no-store headers) for host-dev; stale CSS/JS usually means wrong nginx config/profile.
 - Tailwind: CSS updates require the `tailwind` watcher (`docker compose --profile infra up -d`) or manual rebuild.
+- Tailwind infra watcher now creates `web/nginx/assets/css` at container start and uses polling (`--poll=1000`) with `--watch=always` for reliable long-running watch mode in Docker.
 - Healthchecks: full profile startup depends on curl-based checks for `/catalog/health` and `/orders/health`; if containers stay `unhealthy`, inspect service logs and endpoint readiness.
