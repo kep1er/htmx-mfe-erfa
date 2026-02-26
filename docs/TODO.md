@@ -4,6 +4,7 @@
 - [x] Polish shell/catalog UI layout: aligned top bar, peer-based pill radios, responsive list/detail catalog view, and cohesive row-card action spacing.
 - [x] Fix top-bar pill highlight bug so only the selected rarity/category radio pill is shown as active.
 - [x] Add top-bar cart badge with htmx event-bus refresh (`cart:changed`) and order-service cart-badge fragment endpoint.
+- [x] Reduce cart-badge markup duplication by keeping shell as a minimal bootstrap stub and centralizing badge markup in order-service fragment.
 
 ## Next (Active)
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).

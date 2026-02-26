@@ -33,7 +33,7 @@ Last updated: 2026-02-26
 - `/` loads catalog fragment (with query params `q`, `rarity`, `category`).
 - `/cart` loads order cart fragment.
 - `/health` loads static shell fragment `web/nginx/html/fragments/health-view.html`.
-- Cart badge refreshes from `/orders/fragments/cart-badge` on `load` and `cart:changed` htmx body events.
+- Cart badge refreshes from `/orders/fragments/cart-badge` on `load` and `cart:changed` htmx body events; shell keeps only a lightweight bootstrap stub while order-service owns full badge markup.
 - Top bar search/filter always targets catalog and keeps URL query in sync.
 - `popstate` replays route loading to keep browser navigation consistent.
 
