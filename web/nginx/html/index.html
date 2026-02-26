@@ -103,12 +103,22 @@
                 <a id="nav-cart"
                    href="/cart"
                    data-testid="nav-cart"
-                   class="btn-primary"
+                   class="btn-primary relative"
                    hx-get="/orders/fragments/cart"
                    hx-target="#app-main"
                    hx-swap="innerHTML"
                    hx-push-url="/cart">
                     Cart
+                    <span id="cart-badge"
+                          data-testid="cart-badge"
+                          hx-get="/orders/fragments/cart-badge"
+                          hx-target="this"
+                          hx-trigger="load, cart:changed from:body"
+                          hx-push-url="false"
+                          hx-swap="outerHTML"
+                          class="absolute -right-2 -top-2 hidden min-h-5 min-w-5 items-center justify-center rounded-full border border-slate-300 bg-white px-1.5 text-[10px] font-semibold leading-none text-slate-900">
+                        0
+                    </span>
                 </a>
             </div>
         </div>

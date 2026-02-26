@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<span th:fragment="badge"
+      id="cart-badge"
+      data-testid="cart-badge"
+      hx-get="/orders/fragments/cart-badge"
+      hx-target="this"
+      hx-trigger="cart:changed from:body"
+      hx-push-url="false"
+      hx-swap="outerHTML"
+      class="absolute -right-2 -top-2 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full border border-slate-300 bg-white px-1.5 text-[10px] font-semibold leading-none text-slate-900"
+      th:classappend="${itemCount == 0} ? ' hidden' : ''"
+      th:text="${itemCount}">
+    0
+</span>
+</body>
+</html>

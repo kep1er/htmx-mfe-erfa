@@ -997,3 +997,48 @@
 
 **Suggested Next Step**
 - Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).
+
+### 2026-02-26 - Session 29
+**Goal**
+- Add a top-bar cart badge that updates via htmx event bus whenever cart state changes.
+
+**Implemented**
+- Added order-service badge fragment endpoint:
+  - `GET /orders/fragments/cart-badge` returns `fragments/cart-badge :: badge`.
+- Added new template:
+  - `apps/order-service/src/main/resources/templates/fragments/cart-badge.html`.
+- Added `HX-Trigger` header emission on cart mutations:
+  - `POST /orders/cart/items`
+  - `POST /orders/cart/items/{sku}/increment`
+  - `POST /orders/cart/items/{sku}/decrement`
+  - `POST /orders/cart/items/{sku}/remove`
+  - header value: `{"cart:changed": true}`
+- Updated shell cart button to include persistent badge element:
+  - `id="cart-badge"`
+  - `hx-get="/orders/fragments/cart-badge"`
+  - `hx-trigger="load, cart:changed from:body"`
+  - `hx-swap="outerHTML"`
+- Badge now hides when count is `0` via fragment `th:classappend`.
+- Updated Playwright smoke test to assert badge lifecycle:
+  - hidden at empty cart
+  - `1` after add-to-cart
+  - `2` after increment
+  - hidden again after remove to zero.
+
+**Decisions / Assumptions**
+- Kept existing cart fragment responses and ownership unchanged; badge updates are event-driven via htmx headers.
+
+**Known Issues / Follow-ups**
+- None in scope.
+
+**Verification**
+- Commands run:
+  - `docker compose --profile full up -d --build`
+  - `cd tests/e2e && npm run e2e:all`
+  - `docker compose --profile full down`
+- Manual checks:
+  - Playwright smoke suite passed (`2 passed`), including new cart badge assertions.
+  - Full compose stack was shut down after verification.
+
+**Suggested Next Step**
+- Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).

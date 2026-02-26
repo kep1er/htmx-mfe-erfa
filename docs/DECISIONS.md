@@ -116,3 +116,8 @@
 - **Decision**: Keep top-bar rarity filter test hook `data-testid="pill-rarity-uncommon"` stable in shell markup
 - **Why**: Playwright now uses this hook for route-preserving top-bar filter coverage without CSS/label-coupled selectors
 - **Impact**: Shell visual restyling can continue without breaking this specific E2E selector contract
+
+- **Date**: 2026-02-26
+- **Decision**: Add stable cart badge contract via `#cart-badge`, `GET /orders/fragments/cart-badge`, and `HX-Trigger {"cart:changed": true}` on cart mutation responses
+- **Why**: Keep cart-count updates decoupled from current view by using htmx event bus updates instead of page/view-specific coupling
+- **Impact**: Shell cart badge now refreshes on `load` and `cart:changed`; order-service cart mutations must continue emitting this trigger for consistent badge updates

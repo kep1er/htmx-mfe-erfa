@@ -17,8 +17,11 @@ test("shell smoke checks", async ({ page }) => {
 
   const searchInput = page.locator("#topbar-search-input");
   const uncommonPill = page.locator("[data-testid='pill-rarity-uncommon']");
+  const cartBadge = page.locator("#cart-badge");
   await expect(searchInput).toBeVisible();
   await expect(uncommonPill).toBeVisible();
+  await expect(cartBadge).toHaveCount(1);
+  await expect(cartBadge).toBeHidden();
   await uncommonPill.click();
   await expect
     .poll(async () => {
@@ -62,6 +65,8 @@ test("shell smoke checks", async ({ page }) => {
   );
   await addToCartButton.click();
   await addToCartResponse;
+  await expect(cartBadge).toBeVisible();
+  await expect(cartBadge).toHaveText("1");
 
   const cartNav = page.locator("#nav-cart");
   await expect(cartNav).toBeVisible();
@@ -82,6 +87,31 @@ test("shell smoke checks", async ({ page }) => {
     await cartSummaryPlaceholder.first().scrollIntoViewIfNeeded();
   }
   await expect(cartSummary).toContainText("Pocket Weather Jar (Mini)");
+
+  const cartLine = cartFragment.locator("li[data-sku='itm_001']");
+  const incrementButton = cartLine.locator("button", { hasText: "+" });
+  await expect(incrementButton).toBeVisible();
+  const incrementResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes("/orders/cart/items/itm_001/increment") &&
+      response.request().method() === "POST",
+  );
+  await incrementButton.click();
+  await incrementResponse;
+  await expect(cartBadge).toHaveText("2");
+
+  const removeButton = cartFragment
+    .locator("li[data-sku='itm_001']")
+    .locator("button", { hasText: "remove" });
+  await expect(removeButton).toBeVisible();
+  const removeResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes("/orders/cart/items/itm_001/remove") &&
+      response.request().method() === "POST",
+  );
+  await removeButton.click();
+  await removeResponse;
+  await expect(cartBadge).toBeHidden();
 
   await searchInput.fill("Moonlit");
   await searchInput.press("Enter");

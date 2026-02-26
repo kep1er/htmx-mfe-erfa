@@ -13,8 +13,8 @@ Last updated: 2026-02-26
 ## Stable contracts (routes, fragment IDs, key endpoints)
 - Route ownership: `/catalog/**` -> catalog-service, `/orders/**` -> order-service, `/assets/**` -> nginx.
 - Ports: nginx `8080`, catalog `8081`, order `8082`, postgres `5432`.
-- Stable htmx/shell targets: `#app-main`, `#cart-fragment`, `#catalog-detail`.
-- Stable test/UI hooks: `data-testid="app-main"`, `data-testid="nav-cart"`, `data-testid="pill-rarity-uncommon"`.
+- Stable htmx/shell targets: `#app-main`, `#cart-fragment`, `#catalog-detail`, `#cart-badge`.
+- Stable test/UI hooks: `data-testid="app-main"`, `data-testid="nav-cart"`, `data-testid="pill-rarity-uncommon"`, `data-testid="cart-badge"`.
 - Catalog endpoints:
   - `GET /catalog/fragments/products`
   - `GET /catalog/fragments/items/{id}`
@@ -23,6 +23,7 @@ Last updated: 2026-02-26
   - `GET /catalog/api/items`, `GET /catalog/api/items/{id}`
 - Order endpoints:
   - `GET /orders/fragments/cart`
+  - `GET /orders/fragments/cart-badge`
   - `POST /orders/cart/items`
   - `POST /orders/cart/items/{sku}/increment|decrement|remove`
   - `GET /orders/health`
@@ -32,6 +33,7 @@ Last updated: 2026-02-26
 - `/` loads catalog fragment (with query params `q`, `rarity`, `category`).
 - `/cart` loads order cart fragment.
 - `/health` loads static shell fragment `web/nginx/html/fragments/health-view.html`.
+- Cart badge refreshes from `/orders/fragments/cart-badge` on `load` and `cart:changed` htmx body events.
 - Top bar search/filter always targets catalog and keeps URL query in sync.
 - `popstate` replays route loading to keep browser navigation consistent.
 

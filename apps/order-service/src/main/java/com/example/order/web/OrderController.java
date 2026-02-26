@@ -1,6 +1,7 @@
 package com.example.order.web;
 
 import com.example.order.cart.InMemoryCartService;
+import jakarta.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -53,35 +54,46 @@ public class OrderController {
         return "fragments/cart :: cartSummary";
     }
 
+    @GetMapping("/orders/fragments/cart-badge")
+    public String cartBadgeFragment(Model model) {
+        model.addAttribute("itemCount", inMemoryCartService.snapshot().itemCount());
+        return "fragments/cart-badge :: badge";
+    }
+
     @PostMapping("/orders/cart/items")
     public String addCartItem(
         @RequestParam("sku") String sku,
         @RequestParam(name = "qty", defaultValue = "1") int qty,
-        Model model
+        Model model,
+        HttpServletResponse response
     ) {
         inMemoryCartService.addItem(sku, qty);
         applyCartModel(model);
+        triggerCartChanged(response);
         return "fragments/cart :: cartSummary";
     }
 
     @PostMapping("/orders/cart/items/{sku}/increment")
-    public String incrementCartItem(@PathVariable String sku, Model model) {
+    public String incrementCartItem(@PathVariable String sku, Model model, HttpServletResponse response) {
         inMemoryCartService.increment(sku);
         applyCartModel(model);
+        triggerCartChanged(response);
         return "fragments/cart :: cartSummary";
     }
 
     @PostMapping("/orders/cart/items/{sku}/decrement")
-    public String decrementCartItem(@PathVariable String sku, Model model) {
+    public String decrementCartItem(@PathVariable String sku, Model model, HttpServletResponse response) {
         inMemoryCartService.decrement(sku);
         applyCartModel(model);
+        triggerCartChanged(response);
         return "fragments/cart :: cartSummary";
     }
 
     @PostMapping("/orders/cart/items/{sku}/remove")
-    public String removeCartItem(@PathVariable String sku, Model model) {
+    public String removeCartItem(@PathVariable String sku, Model model, HttpServletResponse response) {
         inMemoryCartService.remove(sku);
         applyCartModel(model);
+        triggerCartChanged(response);
         return "fragments/cart :: cartSummary";
     }
 
@@ -89,5 +101,9 @@ public class OrderController {
         InMemoryCartService.CartSnapshot snapshot = inMemoryCartService.snapshot();
         model.addAttribute("itemCount", snapshot.itemCount());
         model.addAttribute("lines", snapshot.lines());
+    }
+
+    private void triggerCartChanged(HttpServletResponse response) {
+        response.setHeader("HX-Trigger", "{\"cart:changed\": true}");
     }
 }
