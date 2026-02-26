@@ -4,7 +4,8 @@ module.exports = {
         "../nginx/html/**/*.html",
         "../nginx/assets/js/**/*.js",
         "../../apps/catalog-service/src/main/resources/templates/**/*.html",
-        "../../apps/order-service/src/main/resources/templates/**/*.html"
+        "../../apps/order-service/src/main/resources/templates/**/*.html",
+        "../../packages/ui-components/src/**/*.{js,ts}",
     ],
     theme: {
         extend: {}

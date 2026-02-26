@@ -44,6 +44,9 @@ Open: `http://localhost:8080`
 - Enable: `Settings > Build, Execution, Deployment > Compiler > Build project automatically`
 - Enable Registry flag: `compiler.automake.allow.when.app.running`
 - Keep `dev` profile active in each Spring Boot run configuration.
+- Set each Spring Boot run configuration working directory to its app folder:
+  - `apps/catalog-service`
+  - `apps/order-service`
 - After template/code changes, trigger `Build Project` if restart does not happen automatically.
 
 ## Full/E2E Mode (all containers)
