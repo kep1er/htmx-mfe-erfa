@@ -335,3 +335,42 @@
 
 **Suggested Next Step**
 - Add an optional local script to auto-generate the handoff skeleton with the required section order.
+
+### 2026-02-26 - Session 11
+**Goal**
+- Enable a faster local dev feedback loop ("HMR-like") for both Spring Boot apps using DevTools and a `dev` profile.
+
+**Implemented**
+- Added `spring-boot-devtools` (runtime, optional) to:
+  - `apps/catalog-service/pom.xml`
+  - `apps/order-service/pom.xml`
+- Added `application-dev.properties` in both apps with:
+  - `spring.thymeleaf.cache=false`
+  - `spring.devtools.restart.enabled=true`
+  - `spring.devtools.livereload.enabled=true`
+- Removed `spring.thymeleaf.cache=false` from default `application.properties` in both apps to keep defaults production-safe.
+- Updated `README.md` with:
+  - dev-mode run commands using `-Dspring-boot.run.profiles=dev`
+  - IntelliJ auto-restart settings
+  - explicit note that Docker Compose + Playwright remains the E2E path.
+
+**Decisions / Assumptions**
+- Keep DevTools behavior profile-scoped (`dev`) rather than globally enabled.
+- Do not change E2E/runtime architecture in this task.
+
+**Known Issues / Follow-ups**
+- Existing unrelated local changes were present before this task and were left uncommitted.
+
+**Verification**
+- Commands run:
+    - `git status --short`
+    - `Get-Content apps/catalog-service/src/main/resources/application.properties`
+    - `Get-Content apps/order-service/src/main/resources/application.properties`
+    - `Get-Content apps/catalog-service/src/main/resources/application-dev.properties`
+    - `Get-Content apps/order-service/src/main/resources/application-dev.properties`
+- Manual checks:
+    - Confirmed dev profile files exist with Thymeleaf cache disabled and DevTools restart/livereload enabled.
+    - Confirmed default app properties no longer force Thymeleaf cache off.
+
+**Suggested Next Step**
+- Add one tiny script/command aliases to start both services in `dev` profile together for faster local startup.

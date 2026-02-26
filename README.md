@@ -19,6 +19,27 @@ Demo webshop monorepo with:
 - Node.js `20+` and npm
 - Docker Desktop (or Docker Engine + Compose)
 
+## Dev Mode (Fast Feedback for Thymeleaf)
+Run each Spring Boot app with the `dev` profile to disable Thymeleaf template cache and enable DevTools restart/livereload:
+
+```bash
+cd apps/catalog-service
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+```bash
+cd apps/order-service
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+### IntelliJ Settings (for auto-restart)
+- Enable: `Settings > Build, Execution, Deployment > Compiler > Build project automatically`
+- Enable Registry flag: `compiler.automake.allow.when.app.running`
+- Keep `dev` profile active in each Spring Boot run configuration.
+- After template/code changes, trigger `Build Project` if restart does not happen automatically.
+
+Note: Docker Compose + Playwright remains the E2E mode. Dev profile is for fast local iteration.
+
 ## Run Full Stack (Docker Compose)
 ```bash
 docker compose up -d --build

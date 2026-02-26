@@ -31,9 +31,11 @@
 - [x] Add strict staged-file verification rule for `docs/codex/LATEST.md` before commit
 - [x] Simplify handoff workflow: local `docs/codex/LATEST.md` copy helper and no commit requirement
 - [x] Enforce fixed handoff delimiters/section order and require writing `docs/codex/LATEST.md` even on failure
+- [x] Enable Spring Boot DevTools + `dev` profile for faster Thymeleaf feedback loops in both apps
+- [x] Update README with dev-mode run instructions and IntelliJ auto-restart notes
 
 ## Next (Do Not Implement Yet)
-- [ ] Add a tiny helper command/script to generate the required handoff section order and write `docs/codex/LATEST.md`
+- [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 
