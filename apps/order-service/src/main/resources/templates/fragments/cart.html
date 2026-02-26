@@ -2,9 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <section th:fragment="cartSummary" class="rounded border p-4">
-    <h2 class="text-lg font-semibold">Cart (Placeholder)</h2>
+    <h2 class="text-lg font-semibold">Cart</h2>
     <p>Items: <span th:text="${itemCount}">0</span></p>
-    <p>Total: <span th:text="${total}">$0.00</span></p>
+    <ul class="mt-3 space-y-2" th:if="${!#lists.isEmpty(lines)}">
+        <li th:each="line : ${lines}" class="rounded bg-gray-50 p-2">
+            <span th:text="${line.sku}">DEMO-SKU</span>
+            <span class="text-slate-600" th:text="${' x ' + line.qty}"> x 1</span>
+        </li>
+    </ul>
+    <p class="mt-2 text-slate-500" th:if="${#lists.isEmpty(lines)}">Cart is empty.</p>
 </section>
 </body>
 </html>

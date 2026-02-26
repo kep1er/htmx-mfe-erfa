@@ -25,6 +25,22 @@ test("shell smoke checks", async ({ page }) => {
   await expect
     .poll(async () => (await catalogProducts.innerText()).trim())
     .not.toBe("Loading catalog products...");
+
+  const cartFragment = page.locator("#cart-fragment");
+  await expect(cartFragment).toBeVisible();
+  await expect
+    .poll(async () => (await cartFragment.innerText()).trim())
+    .not.toBe("Loading cart placeholder...");
+
+  const cartBeforeAdd = (await cartFragment.innerText()).trim();
+  const addToCartButton = page.locator("button", { hasText: "Add to cart" }).first();
+  await expect(addToCartButton).toBeVisible();
+  await addToCartButton.click();
+
+  await expect
+    .poll(async () => (await cartFragment.innerText()).trim())
+    .not.toBe(cartBeforeAdd);
+  await expect(cartFragment).toContainText("Items:");
 });
 
 test("health endpoints return 200", async ({ request }) => {

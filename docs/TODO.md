@@ -35,9 +35,12 @@
 - [x] Update README with dev-mode run instructions and IntelliJ auto-restart notes
 - [x] Add compose profile split for `infra` (postgres + nginx-dev) and `full` (postgres + apps + nginx)
 - [x] Add `web/nginx/nginx.dev.conf` and update docs/commands for both runtime modes
+- [x] Implement F-001 add-to-cart cross-service flow with htmx (`/orders/cart/items` + cart fragment update)
+- [x] Extend Playwright smoke test to assert cart fragment changes after Add to cart
 
 ## Next (Do Not Implement Yet)
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
+- [ ] Add cart line remove/decrement action and endpoint in `order-service` fragment flow
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 

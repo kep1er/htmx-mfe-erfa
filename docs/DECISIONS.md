@@ -66,3 +66,8 @@
 - **Decision**: Add `tests/e2e` Node-based `e2e:all` orchestration script
 - **Why**: Provide one cross-platform command to compose up/build, wait for nginx, and run Playwright
 - **Impact**: Local E2E flow becomes a single command; stack is left running by default unless `--down` is used
+
+- **Date**: 2026-02-26
+- **Decision**: Implement cart write flow in `order-service` as in-memory SKU/qty lines with `POST /orders/cart/items` returning the cart Thymeleaf fragment
+- **Why**: Deliver the first cross-service htmx vertical slice with minimal domain complexity
+- **Impact**: Catalog fragment can post directly to `/orders/cart/items` and update `#cart-fragment` without page reload; cart state resets on service restart

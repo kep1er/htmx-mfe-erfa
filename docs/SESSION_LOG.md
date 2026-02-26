@@ -410,3 +410,39 @@
 
 **Suggested Next Step**
 - Add container healthchecks for `catalog-service` and `order-service`, then switch nginx `depends_on` to `service_healthy`.
+
+### 2026-02-26 - Session 13
+**Goal**
+- Implement F-001 add-to-cart cross-service flow via htmx between catalog and order-service.
+
+**Implemented**
+- Added `POST /orders/cart/items` in `order-service` to accept `sku` and `qty` (`qty` default `1`) and return updated cart fragment.
+- Added in-memory cart service `InMemoryCartService` with SKU-based line aggregation and item count snapshot.
+- Updated order cart fragment to render:
+  - item count
+  - line items (`sku x qty`)
+  - empty-state text when cart has no lines
+- Updated catalog products fragment to render `Add to cart` buttons/forms that post to `/orders/cart/items` and target `#cart-fragment`.
+- Added `id="cart-fragment"` in shell HTML so cart updates can be targeted from catalog htmx interactions.
+- Extended Playwright smoke test:
+  - clicks first `Add to cart`
+  - asserts cart fragment content changes afterward.
+- Updated Playwright global setup startup hint to use `docker compose --profile full up -d --build`.
+
+**Decisions / Assumptions**
+- Cart remains in-memory for this step; no persistence added.
+- Cart lines display SKU + qty only (no pricing math yet) to keep scope minimal.
+
+**Known Issues / Follow-ups**
+- Existing unrelated local changes were present before this task and were left uncommitted.
+
+**Verification**
+- Commands run:
+    - `mvn -DskipTests compile` (catalog-service)
+    - `mvn -DskipTests compile` (order-service)
+    - `cd tests/e2e && npm run e2e:all`
+- Manual checks:
+    - Playwright passed with new add-to-cart cart-change assertion in full profile mode.
+
+**Suggested Next Step**
+- Add cart line remove/decrement endpoint and htmx action in cart fragment.
