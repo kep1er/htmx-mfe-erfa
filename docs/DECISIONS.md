@@ -96,3 +96,13 @@
 - **Decision**: Make `catalog-service` the owner of shared item summary HTML via `/catalog/fragments/item-summary/{id}` and compose it in `order-service` cart with per-line htmx lazy loads
 - **Why**: Ensure summary markup/styling changes in one place and automatically propagate to catalog list and cart views
 - **Impact**: Catalog list and cart lines now reuse the same summary fragment; cart uses Option A (`one summary request per visible line`) and keeps quantity/remove controls in `order-service`
+
+- **Date**: 2026-02-26
+- **Decision**: Add compose healthchecks for `catalog-service`/`order-service` using bash `/dev/tcp` HTTP probes against `/catalog/health` and `/orders/health`
+- **Why**: Runtime images do not include curl/wget; bash-based probes avoid image/tooling changes while still validating HTTP readiness
+- **Impact**: `nginx` in full profile now waits on both app containers being healthy (`service_healthy`) before startup
+
+- **Date**: 2026-02-26
+- **Decision**: Move shell UX to route-like htmx views with shared top navigation and `#app-main` content swaps for `/`, `/cart`, and `/health`
+- **Why**: Simplify the shell into one persistent layout and make catalog/cart/health view changes explicit without changing service route ownership
+- **Impact**: `nginx` shell now owns view composition/routing state; catalog and order services continue owning their existing fragment endpoints, including catalog-owned item summary and order-owned cart composition

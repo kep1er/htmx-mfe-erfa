@@ -1,52 +1,28 @@
 import { expect, test } from "@playwright/test";
 
 test("shell smoke checks", async ({ page }) => {
-  await page.goto("http://localhost:8080");
+  await page.goto("http://localhost:8080/");
 
   await expect(page).toHaveTitle(/Webshop Demo Shell/);
 
   const shopBadge = page.locator("shop-badge[label='Bootstrap Step 1']");
   await expect(shopBadge).toHaveCount(1);
 
-  const catalogHealth = page.locator("#catalog-health");
-  await expect(catalogHealth).toBeVisible();
-  await expect
-    .poll(async () => (await catalogHealth.innerText()).trim())
-    .not.toBe("Loading catalog health...");
+  const appMain = page.locator("#app-main");
+  await expect(appMain).toBeVisible();
+  await expect(appMain).toContainText("Magical Items");
 
-  const orderHealth = page.locator("#order-health");
-  await expect(orderHealth).toBeVisible();
-  await expect
-    .poll(async () => (await orderHealth.innerText()).trim())
-    .not.toBe("Loading order health...");
-
-  const catalogProducts = page.locator("#catalog-products");
-  await expect(catalogProducts).toBeVisible();
-  await expect
-    .poll(async () => (await catalogProducts.innerText()).trim())
-    .not.toBe("Loading catalog products...");
-  await expect(catalogProducts).toContainText("Magical Items");
-  const catalogFilter = page.locator("[data-testid='catalog-filter']");
   const catalogItems = page.locator("[data-testid='catalog-item']");
   const catalogEmpty = page.locator("[data-testid='catalog-empty']");
-  await expect(catalogFilter).toBeVisible();
   await expect
     .poll(async () => (await catalogItems.count()) + (await catalogEmpty.count()))
     .toBeGreaterThan(0);
 
-  const searchInput = page.locator("#catalog-search-input");
-  const raritySelect = page.locator("#catalog-rarity-select");
-  const categorySelect = page.locator("#catalog-category-select");
+  const searchInput = page.locator("#topbar-search-input");
+  const uncommonPill = page.locator("button[data-pill-key='rarity'][data-pill-value='uncommon']");
   await expect(searchInput).toBeVisible();
-  await expect(raritySelect).toBeVisible();
-  await expect(categorySelect).toBeVisible();
-  const typeSearch = async (value: string) => {
-    await searchInput.click();
-    await searchInput.press("Control+A");
-    await searchInput.type(value);
-  };
-
-  await raritySelect.selectOption("uncommon");
+  await expect(uncommonPill).toBeVisible();
+  await uncommonPill.click();
   await expect
     .poll(async () => {
       const count = await catalogItems.count();
@@ -63,38 +39,9 @@ test("shell smoke checks", async ({ page }) => {
     })
     .toBe(true);
 
-  const categoryOptions = categorySelect.locator("option");
-  const firstCategoryValue = await categoryOptions.nth(1).getAttribute("value");
-  expect(firstCategoryValue).not.toBeNull();
-  const categoryValue =
-    (await categorySelect.locator("option[value='Curios']").count()) > 0
-      ? "Curios"
-      : firstCategoryValue!;
-  await categorySelect.selectOption(categoryValue);
-  await expect
-    .poll(async () => {
-      const count = await catalogItems.count();
-      if (count === 0) {
-        return false;
-      }
-      for (let i = 0; i < count; i += 1) {
-        const itemText = (await catalogItems.nth(i).innerText()).toLowerCase();
-        if (!itemText.includes(categoryValue.toLowerCase()) || !itemText.includes("uncommon")) {
-          return false;
-        }
-      }
-      return true;
-    })
-    .toBe(true);
-
-  await typeSearch("Weather");
-  await expect(catalogProducts).toContainText("Pocket Weather Jar");
-
-  await typeSearch("zzzz-no-such-item");
-  await expect(catalogEmpty).toBeVisible();
-
-  await typeSearch("Weather");
-  await expect(catalogProducts).toContainText("Pocket Weather Jar");
+  await searchInput.fill("Weather");
+  await searchInput.press("Enter");
+  await expect(appMain).toContainText("Pocket Weather Jar");
 
   const detailButton = page.locator("button[data-item-id='itm_001']");
   await expect(detailButton).toBeVisible();
@@ -105,26 +52,27 @@ test("shell smoke checks", async ({ page }) => {
   await expect(catalogDetail).toContainText("Pocket Weather Jar (Mini)");
   await expect(catalogDetail).toContainText(/Skywright/i);
 
-  const cartFragment = page.locator("#cart-fragment");
-  await expect(cartFragment).toBeVisible();
-  await expect
-    .poll(async () => (await cartFragment.innerText()).trim())
-    .not.toBe("Loading cart placeholder...");
-
-  const cartBeforeAdd = (await cartFragment.innerText()).trim();
-  const weatherCatalogItem = catalogProducts
+  const weatherCatalogItem = page
     .locator("[data-testid='catalog-item']")
     .filter({ hasText: "Pocket Weather Jar (Mini)" });
   await expect(weatherCatalogItem).toHaveCount(1);
   const addToCartButton = weatherCatalogItem.locator("button", { hasText: "Add to cart" });
   await expect(addToCartButton).toBeVisible();
+  const addToCartResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes("/orders/cart/items") &&
+      response.request().method() === "POST",
+  );
   await addToCartButton.click();
+  await addToCartResponse;
 
-  await expect
-    .poll(async () => (await cartFragment.innerText()).trim())
-    .not.toBe(cartBeforeAdd);
+  const cartNav = page.locator("#nav-cart");
+  await expect(cartNav).toBeVisible();
+  await cartNav.click();
+
+  const cartFragment = page.locator("#cart-fragment");
+  await expect(cartFragment).toBeVisible();
   await expect(cartFragment).toContainText("Items:");
-  await cartFragment.scrollIntoViewIfNeeded();
 
   const cartSummary = cartFragment.locator("[data-testid='item-summary'][data-item-id='itm_001']");
   const cartSummaryPlaceholder = cartFragment.locator(
@@ -137,6 +85,26 @@ test("shell smoke checks", async ({ page }) => {
     await cartSummaryPlaceholder.first().scrollIntoViewIfNeeded();
   }
   await expect(cartSummary).toContainText("Pocket Weather Jar (Mini)");
+
+  await searchInput.fill("Moonlit");
+  await searchInput.press("Enter");
+  await expect(appMain).toContainText("Moonlit Compass");
+  await expect(appMain).not.toContainText("Cart is empty.");
+
+  const healthNav = page.locator("#nav-health");
+  await expect(healthNav).toBeVisible();
+  await healthNav.click();
+  await expect(page).toHaveURL(/\/health$/);
+  const healthView = page.locator("[data-testid='health-view']");
+  await expect(healthView).toBeVisible();
+  await expect(healthView).toContainText("Catalog Health");
+  await expect(healthView).toContainText("Order Health");
+  await expect
+    .poll(async () => (await page.locator("#catalog-health").innerText()).trim())
+    .not.toBe("Loading catalog health...");
+  await expect
+    .poll(async () => (await page.locator("#order-health").innerText()).trim())
+    .not.toBe("Loading order health...");
 });
 
 test("health endpoints return 200", async ({ request }) => {

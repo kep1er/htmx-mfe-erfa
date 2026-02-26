@@ -778,3 +778,86 @@
 
 **Suggested Next Step**
 - Add an optional batch summary endpoint in catalog for later optimization once cart lines grow.
+
+### 2026-02-26 - Session 23
+**Goal**
+- Add service healthchecks for `catalog-service` and `order-service` and tighten compose dependency readiness.
+
+**Implemented**
+- Updated `docker-compose.yml`:
+  - added `healthcheck` for `catalog-service` probing `GET /catalog/health` on `localhost:8081`
+  - added `healthcheck` for `order-service` probing `GET /orders/health` on `localhost:8082`
+  - changed `nginx` `depends_on` conditions from `service_started` to `service_healthy` for both app services
+- Kept profile/port ownership unchanged (`full` runtime still routes through nginx on `8080`).
+
+**Decisions / Assumptions**
+- Used bash `/dev/tcp` HTTP probes in compose healthchecks because the runtime image has `bash` but no `curl`/`wget`.
+- Reused existing JSON health endpoints as readiness signals.
+
+**Known Issues / Follow-ups**
+- Unrelated local change in `docs/CODEX_WORKING_AGREEMENT.md` may still exist and remains outside this task scope.
+
+**Verification**
+- Commands run:
+  - `docker compose --profile full config --services`
+  - `docker compose --profile full config`
+  - `docker compose --profile infra down`
+  - `docker compose --profile full up -d --build`
+  - `docker compose --profile full ps`
+  - `(Invoke-WebRequest -UseBasicParsing http://localhost:8080/catalog/health).StatusCode`
+  - `(Invoke-WebRequest -UseBasicParsing http://localhost:8080/orders/health).StatusCode`
+- Manual checks:
+  - Confirmed `catalog-service` and `order-service` report `healthy` in compose status.
+  - Confirmed nginx starts only after both app services reach `healthy`.
+  - Confirmed both health endpoints return HTTP `200` through nginx.
+
+**Suggested Next Step**
+- Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).
+
+### 2026-02-26 - Session 24
+**Goal**
+- Refactor nginx shell into shared top navigation + main content area, move health UI to `/health`, and keep service-owned fragment responsibilities intact.
+
+**Implemented**
+- Reworked shell layout in `web/nginx/html/index.html`:
+  - replaced old two-panel service boxes with persistent top nav and `<main id="app-main">`
+  - added top bar controls (logo, search, rarity/category pills, clear action, cart link, health link)
+  - kept Lit badge in header
+- Added shell health view fragment `web/nginx/html/fragments/health-view.html` that loads:
+  - `/catalog/fragments/health`
+  - `/orders/fragments/health`
+- Implemented shell soft-navigation + route-aware initial load in `web/nginx/assets/js/app.js`:
+  - `/` -> catalog fragment
+  - `/cart` -> cart fragment
+  - `/health` -> shell health fragment
+  - top-bar search/pills always request `/catalog/fragments/products` into `#app-main` and normalize browser URL back to `/` with query params
+- Updated catalog products fragment (`apps/catalog-service/.../fragments/products.html`):
+  - removed embedded filter form in favor of shell top-bar controls
+  - moved detail container into fragment (`#catalog-detail`) so detail loading works when fragment is rendered in `#app-main`
+  - changed add-to-cart form swap behavior to `hx-swap="none"` so cart writes still work from catalog view without requiring on-page cart container
+- Updated Playwright smoke test (`tests/e2e/specs/smoke.spec.ts`) for new shell UX:
+  - validates default catalog load on `/`
+  - validates top-bar filtering and detail load
+  - validates cart navigation and add-to-cart persistence with cart item summary
+  - validates health view navigation via top-bar link and panel loading
+
+**Decisions / Assumptions**
+- Kept backend endpoint contracts unchanged; routing changes are shell-side only.
+- Kept catalog-owned summary fragment and order-owned cart composition unchanged in ownership.
+
+**Known Issues / Follow-ups**
+- Existing pre-session local modifications from Session 23 (`docker-compose.yml`, docs memory files) were already present and remained in the working tree.
+
+**Verification**
+- Commands run:
+  - `docker compose --profile full up -d --build`
+  - `cd tests/e2e && npm run e2e:all` (first run failed once due a timing race around health-nav assertion)
+  - `cd tests/e2e && npm run e2e:all` (second run passed after stabilizing top-bar trigger behavior)
+  - `docker compose --profile full down`
+- Manual checks:
+  - Confirmed shell starts on catalog by default.
+  - Confirmed cart and health views swap into `#app-main`.
+  - Confirmed add-to-cart still results in cart summary rendering from catalog-owned summary fragment.
+
+**Suggested Next Step**
+- Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).

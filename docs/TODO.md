@@ -58,13 +58,17 @@
 - [x] Reuse catalog item summary in products list and cart line rendering
 - [x] Add cart line increment/decrement/remove endpoints and controls with htmx fragment swaps
 - [x] Assert lazy-loaded cart item summary for `itm_001` in Playwright smoke test
+- [x] Refactor shell layout to shared top nav + `#app-main` content area with shell-driven view swaps
+- [x] Move health UI to shell route `/health` and remove home-page health panels
+- [x] Add top-bar search/pill filter flow that always returns to catalog view
+- [x] Update Playwright smoke coverage for shell routes (`/`, `/cart`, `/health`) and cart flow
 
 ## Next (Do Not Implement Yet)
-- [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
+- [x] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile)
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
-- [ ] Add category/rarity filter state reset UX (clear filters action)
+- [x] Add category/rarity filter state reset UX (clear filters action)
 - [ ] Add dedicated Playwright test file for catalog filtering permutations (keep smoke test small)
 - [ ] Add optional catalog batch summary endpoint for cart optimization (defer until needed)
 

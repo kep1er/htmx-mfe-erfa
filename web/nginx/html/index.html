@@ -9,69 +9,81 @@
     <script type="module" src="/assets/ui-components/shop-badge.js"></script>
 </head>
 <body class="min-h-screen bg-slate-100 text-slate-900">
-<main class="mx-auto max-w-4xl p-6 md:p-10">
-    <header class="mb-8 rounded border bg-white p-6 shadow-sm">
-        <h1 class="text-3xl font-bold">Webshop Demo Shell</h1>
-        <p class="mt-2 text-slate-600">Nginx + htmx + Thymeleaf fragments + Lit component.</p>
-        <div class="mt-4">
+<header class="sticky top-0 z-10 border-b bg-white/95 shadow-sm backdrop-blur">
+    <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between">
+        <div class="flex items-center gap-3">
+            <a id="nav-home"
+               href="/"
+               class="text-xl font-bold text-slate-900"
+               hx-get="/catalog/fragments/products"
+               hx-target="#app-main"
+               hx-swap="innerHTML"
+               hx-push-url="/">
+                Webshop
+            </a>
             <shop-badge label="Bootstrap Step 1"></shop-badge>
         </div>
-    </header>
 
-    <section class="grid gap-4 md:grid-cols-2">
-        <article class="rounded border bg-white p-4 shadow-sm">
-            <div class="mb-3 flex items-center justify-between">
-                <h2 class="text-lg font-semibold">Catalog Service</h2>
-                <button class="rounded bg-slate-900 px-3 py-2 text-sm text-white"
-                        hx-get="/catalog/fragments/health"
-                        hx-target="#catalog-health"
-                        hx-swap="innerHTML">
-                    Refresh
-                </button>
+        <form id="topbar-catalog-form"
+              class="w-full md:max-w-3xl"
+              data-testid="topbar-catalog-form"
+              hx-get="/catalog/fragments/products"
+              hx-target="#app-main"
+              hx-swap="innerHTML"
+              hx-push-url="true"
+              hx-trigger="submit">
+            <input id="topbar-rarity-input" name="rarity" type="hidden" value="">
+            <input id="topbar-category-input" name="category" type="hidden" value="">
+            <div class="space-y-2">
+                <input id="topbar-search-input"
+                       data-testid="topbar-search-input"
+                       name="q"
+                       type="search"
+                       placeholder="Search magical items"
+                       class="w-full rounded border border-slate-300 px-3 py-2 text-sm"/>
+                <div class="flex flex-wrap items-center gap-2 text-xs md:text-sm">
+                    <span class="font-semibold text-slate-600">Rarity:</span>
+                    <button type="button" data-pill-key="rarity" data-pill-value="common" class="rounded-full border border-slate-300 px-3 py-1">common</button>
+                    <button type="button" data-pill-key="rarity" data-pill-value="uncommon" class="rounded-full border border-slate-300 px-3 py-1">uncommon</button>
+                    <button type="button" data-pill-key="rarity" data-pill-value="rare" class="rounded-full border border-slate-300 px-3 py-1">rare</button>
+                    <button type="button" data-pill-key="rarity" data-pill-value="legendary" class="rounded-full border border-slate-300 px-3 py-1">legendary</button>
+                    <span class="ml-2 font-semibold text-slate-600">Category:</span>
+                    <button type="button" data-pill-key="category" data-pill-value="Curios" class="rounded-full border border-slate-300 px-3 py-1">Curios</button>
+                    <button type="button" data-pill-key="category" data-pill-value="Arcana" class="rounded-full border border-slate-300 px-3 py-1">Arcana</button>
+                    <button type="button" data-pill-key="category" data-pill-value="Apparel" class="rounded-full border border-slate-300 px-3 py-1">Apparel</button>
+                    <button id="topbar-clear-filters" type="button" class="ml-2 rounded border border-slate-400 px-3 py-1 text-slate-700">
+                        Clear
+                    </button>
+                </div>
             </div>
-            <div id="catalog-health"
-                 hx-get="/catalog/fragments/health"
-                 hx-trigger="load"
-                 hx-swap="innerHTML">
-                Loading catalog health...
-            </div>
-            <div id="catalog-products"
-                 class="mt-4"
-                 hx-get="/catalog/fragments/products"
-                 hx-trigger="load"
-                 hx-swap="innerHTML">
-                Loading catalog products...
-            </div>
-            <div id="catalog-detail" class="mt-4 rounded border p-4 text-sm text-slate-600">
-                Select an item to view details.
-            </div>
-        </article>
+        </form>
 
-        <article class="rounded border bg-white p-4 shadow-sm">
-            <div class="mb-3 flex items-center justify-between">
-                <h2 class="text-lg font-semibold">Order Service</h2>
-                <button class="rounded bg-slate-900 px-3 py-2 text-sm text-white"
-                        hx-get="/orders/fragments/health"
-                        hx-target="#order-health"
-                        hx-swap="innerHTML">
-                    Refresh
-                </button>
-            </div>
-            <div id="order-health"
-                 hx-get="/orders/fragments/health"
-                 hx-trigger="load"
-                 hx-swap="innerHTML">
-                Loading order health...
-            </div>
-            <div id="cart-fragment"
-                 class="mt-4"
-                 hx-get="/orders/fragments/cart"
-                 hx-trigger="load"
-                 hx-swap="outerHTML">
-                Loading cart placeholder...
-            </div>
-        </article>
-    </section>
+        <div class="flex items-center justify-end">
+            <a id="nav-health"
+               href="/health"
+               class="mr-2 rounded border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700"
+               hx-get="/fragments/health-view.html"
+               hx-target="#app-main"
+               hx-swap="innerHTML"
+               hx-push-url="/health">
+                Health
+            </a>
+            <a id="nav-cart"
+               href="/cart"
+               data-testid="nav-cart"
+               class="rounded bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+               hx-get="/orders/fragments/cart"
+               hx-target="#app-main"
+               hx-swap="innerHTML"
+               hx-push-url="/cart">
+                Cart
+            </a>
+        </div>
+    </div>
+</header>
+
+<main id="app-main" data-testid="app-main" class="mx-auto max-w-6xl px-4 py-6 md:py-8">
+    <div class="rounded border bg-white p-4 text-sm text-slate-600">Loading view...</div>
 </main>
 <script src="/assets/js/app.js"></script>
 </body>
