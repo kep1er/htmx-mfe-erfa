@@ -12,16 +12,16 @@ public interface MagicShopItemRepository extends JpaRepository<MagicShopItem, St
         select distinct i
         from MagicShopItem i
         left join i.tags t
-        where (:q is null
-               or lower(i.name) like lower(concat('%', :q, '%'))
-               or lower(i.category) like lower(concat('%', :q, '%'))
-               or lower(t) like lower(concat('%', :q, '%')))
+        where (:qPattern is null
+               or lower(i.name) like :qPattern
+               or lower(i.category) like :qPattern
+               or lower(t) like :qPattern)
           and (:rarity is null or i.rarity = :rarity)
           and (:category is null or i.category = :category)
         order by i.name asc
         """)
     List<MagicShopItem> findFiltered(
-        @Param("q") String q,
+        @Param("qPattern") String qPattern,
         @Param("rarity") Rarity rarity,
         @Param("category") String category
     );

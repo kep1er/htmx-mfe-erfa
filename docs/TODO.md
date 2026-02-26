@@ -47,6 +47,7 @@
 - [x] Add catalog search + rarity/category filters via htmx on `/catalog/fragments/products`
 - [x] Add catalog products empty-state messaging for no filter results
 - [x] Extend Playwright smoke coverage for catalog filter interactions
+- [x] Fix catalog filter SQL runtime error (`lower(bytea)`) by switching to a pre-built lowercase LIKE pattern parameter
 
 ## Next (Do Not Implement Yet)
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness

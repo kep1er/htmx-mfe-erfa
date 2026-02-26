@@ -600,3 +600,37 @@
 
 **Suggested Next Step**
 - Resolve host port 8082 conflict for full profile runs (stop local process or make compose app ports internal-only if approved).
+
+### 2026-02-26 - Session 18
+**Goal**
+- Fix catalog filter query runtime error (`lower(bytea)`) reported during local dev requests.
+
+**Implemented**
+- Updated `MagicShopItemRepository.findFiltered(...)` to accept a pre-built `qPattern` and compare with:
+  - `lower(i.name) like :qPattern`
+  - `lower(i.category) like :qPattern`
+  - `lower(t) like :qPattern`
+- Updated `MagicShopItemService.listFiltered(...)` to build a lowercase `%...%` pattern before repository call.
+- Kept route contracts and filter behavior unchanged.
+
+**Decisions / Assumptions**
+- Treated this as a targeted bugfix only; no UI/contract refactors.
+
+**Known Issues / Follow-ups**
+- A separate local uncommitted change exists in `apps/catalog-service/src/main/resources/templates/fragments/products.html` (`hx-push-url`) and was intentionally left out of this fix commit.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile full build catalog-service`
+    - `docker compose --profile full up -d postgres`
+    - `docker run -d --name webshop-catalog-filter-fix --network webshop-net -p 18081:8081 -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/webshop -e SPRING_DATASOURCE_USERNAME=webshop -e SPRING_DATASOURCE_PASSWORD=webshop -e SPRING_FLYWAY_ENABLED=true -e SPRING_JPA_HIBERNATE_DDL_AUTO=validate htmx-mfe-erfa-catalog-service`
+    - `Invoke-WebRequest http://localhost:18081/catalog/fragments/products?q=Weather`
+    - `Invoke-WebRequest http://localhost:18081/catalog/fragments/products?q=zzzz-no-such-item`
+    - `docker rm -f webshop-catalog-filter-fix`
+    - `docker compose --profile full down`
+- Manual checks:
+    - Filtered fragment returns HTTP 200 for matching and empty queries.
+    - Response contains expected filtered item text and empty-state text; no SQL error.
+
+**Suggested Next Step**
+- Re-run full `tests/e2e` once local host port `8082` is free.
