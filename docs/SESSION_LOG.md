@@ -970,3 +970,30 @@
 
 **Suggested Next Step**
 - Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).
+
+### 2026-02-26 - Session 28
+**Goal**
+- Fix top-bar rarity/category pill highlight state so only the selected pill is shown as active.
+
+**Implemented**
+- Updated `web/nginx/html/index.html` rarity/category radio-pill markup:
+    - wrapped each input/label pair so `peer-checked` styles are scoped per pill
+    - retained existing IDs, names, htmx triggers, and test hooks.
+- Kept all search/filter/cart/detail behavior unchanged.
+
+**Decisions / Assumptions**
+- Chose markup scoping instead of JS/CSS behavior changes to keep the fix minimal and avoid route/contract impact.
+
+**Known Issues / Follow-ups**
+- None in scope.
+
+**Verification**
+- Commands run:
+    - `cd tests/e2e && npm run e2e:all`
+    - `docker compose --profile full down`
+- Manual checks:
+    - Playwright smoke suite passed (`2 passed`).
+    - Full compose stack was shut down after verification.
+
+**Suggested Next Step**
+- Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).

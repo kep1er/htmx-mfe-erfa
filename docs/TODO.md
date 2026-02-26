@@ -2,6 +2,7 @@
 
 ## Recently Done
 - [x] Polish shell/catalog UI layout: aligned top bar, peer-based pill radios, responsive list/detail catalog view, and cohesive row-card action spacing.
+- [x] Fix top-bar pill highlight bug so only the selected rarity/category radio pill is shown as active.
 
 ## Next (Active)
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).
