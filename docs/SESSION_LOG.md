@@ -479,3 +479,46 @@
 
 **Suggested Next Step**
 - Add `docker compose --profile infra logs -f tailwind` troubleshooting snippet to README.
+
+### 2026-02-26 - Session 15
+**Goal**
+- Introduce the catalog `MagicShopItem` persistence domain with Flyway V2 seed data and minimal JSON verification endpoints.
+
+**Implemented**
+- Added catalog domain model under `apps/catalog-service/src/main/java/com/example/catalog/magic`:
+  - `MagicShopItem` entity (`magic_shop_items`)
+  - `Rarity` enum with lowercase string storage via `RarityConverter`
+  - embedded value objects `Dimensions` and `Charges`
+  - element-collection mappings for tags/effects/limitations/instructions/warnings/materials/related item IDs
+- Added `MagicShopItemRepository` and `MagicShopItemService` with:
+  - `listAll()`
+  - `getById(id)`
+- Added JSON endpoints in `MagicShopItemApiController`:
+  - `GET /catalog/api/items` (summary projection)
+  - `GET /catalog/api/items/{id}` (full detail projection)
+- Added Flyway migration `V2__magic_shop_items.sql`:
+  - creates `magic_shop_items` and all required element-collection tables
+  - applies non-negative constraints for numeric inventory/size/charges fields
+  - seeds 6 magical items including full rich sample for `itm_001`
+
+**Decisions / Assumptions**
+- Stored rarity values as lowercase strings (`common|uncommon|rare|legendary`) to match schema contract.
+- Used relational collection tables instead of JSONB for arrays.
+
+**Known Issues / Follow-ups**
+- Local `mvn` executable is unavailable in this shell; compile verification was run via Docker build.
+- Ports `8081`/`8082` were already occupied by local processes, so runtime API verification used temporary container port `18081`.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile full build catalog-service`
+    - `docker run -d --name webshop-catalog-verify --network webshop-net -p 18081:8081 -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/webshop -e SPRING_DATASOURCE_USERNAME=webshop -e SPRING_DATASOURCE_PASSWORD=webshop -e SPRING_FLYWAY_ENABLED=true -e SPRING_JPA_HIBERNATE_DDL_AUTO=validate htmx-mfe-erfa-catalog-service`
+    - `Invoke-RestMethod http://localhost:18081/catalog/api/items`
+    - `Invoke-RestMethod http://localhost:18081/catalog/api/items/itm_001`
+    - `docker rm -f webshop-catalog-verify`
+- Manual checks:
+    - Confirmed item list returns seeded records including `itm_001`.
+    - Confirmed detail endpoint for `itm_001` returns rich fields (lore/effects/limitations/instructions/warnings/materials/dimensions/related/releasedAt/attunement/charges).
+
+**Suggested Next Step**
+- Build the catalog page/fragment wiring for magical items and adapt the existing add-to-cart form fields without breaking F-001 flow.

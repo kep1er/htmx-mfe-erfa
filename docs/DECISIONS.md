@@ -76,3 +76,8 @@
 - **Decision**: Run Tailwind watch in compose `infra` profile via dedicated `tailwind` service
 - **Why**: Remove manual Tailwind watch startup from local dev loop
 - **Impact**: `docker compose --profile infra up -d` now includes CSS watcher behavior and writes to `web/nginx/assets/css/app.css`
+
+- **Date**: 2026-02-26
+- **Decision**: Model `MagicShopItem` rich arrays with JPA `@ElementCollection` tables and map dimensions/charges as embedded columns
+- **Why**: Keep persistence relational and PostgreSQL-friendly for this incremental step, avoiding JSONB complexity
+- **Impact**: Catalog now has normalized tables (`magic_shop_items` + collection tables) and simple API-ready mapping for upcoming item list/detail UI work

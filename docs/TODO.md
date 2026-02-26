@@ -39,8 +39,12 @@
 - [x] Extend Playwright smoke test to assert cart fragment changes after Add to cart
 - [x] Reconcile manual dev workflow updates (`nginx.dev` no-cache, dev Thymeleaf file prefix, README IntelliJ working dir note)
 - [x] Add Tailwind watch service to compose `infra` profile
+- [x] Add `MagicShopItem` catalog domain (entity/repository/service) with Flyway V2 schema + seed data
+- [x] Add minimal catalog JSON endpoints for magic items (`/catalog/api/items`, `/catalog/api/items/{id}`)
 
 ## Next (Do Not Implement Yet)
+- [ ] Build catalog Thymeleaf fragment/page for magical items and wire to current shell
+- [ ] Adapt catalog add-to-cart forms to new item identifiers while keeping F-001 behavior intact
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
 - [ ] Add cart line remove/decrement action and endpoint in `order-service` fragment flow
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile)
