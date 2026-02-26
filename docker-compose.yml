@@ -39,8 +39,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: webshop
       SPRING_FLYWAY_ENABLED: "true"
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
-    ports:
-      - "8081:8081"
 
   order-service:
     build:
@@ -54,8 +52,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "8082:8082"
 
   nginx:
     image: nginx:1.27-alpine

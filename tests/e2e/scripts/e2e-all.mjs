@@ -36,6 +36,15 @@ function runCommand(command, cwd) {
   });
 }
 
+async function runBestEffort(command, cwd) {
+  try {
+    await runCommand(command, cwd);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`Continuing after best-effort command failure: ${message}`);
+  }
+}
+
 async function waitForUrl(url) {
   const startedAt = Date.now();
   let lastError = "unknown error";
@@ -63,6 +72,7 @@ async function waitForUrl(url) {
 async function main() {
   let composeStarted = false;
   try {
+    await runBestEffort("docker compose --profile infra down", repoRoot);
     await runCommand("docker compose --profile full up -d --build", repoRoot);
     composeStarted = true;
     await waitForUrl(BASE_URL);

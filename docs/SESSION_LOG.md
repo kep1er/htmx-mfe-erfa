@@ -664,3 +664,38 @@
 
 **Suggested Next Step**
 - Add a dedicated Playwright test file for catalog filtering permutations to keep smoke test concise.
+
+### 2026-02-26 - Session 20
+**Goal**
+- Make compose `full` profile conflict-free by removing host publishing for app ports `8081`/`8082`.
+
+**Implemented**
+- Updated `docker-compose.yml` (full profile):
+  - removed host port mappings for `catalog-service` (`8081:8081`)
+  - removed host port mappings for `order-service` (`8082:8082`)
+  - kept nginx on `8080` and postgres on `5432`.
+- Updated `README.md`:
+  - documented that `infra` and `full` cannot run simultaneously because both use host `8080`
+  - added explicit `docker compose --profile infra down` step before full/E2E runs
+  - documented that full mode app containers are internal-only and should be accessed via nginx on `8080`
+  - clarified host `8081`/`8082` checks are for host-run apps (infra mode), not full mode.
+- Updated `tests/e2e/scripts/e2e-all.mjs`:
+  - added best-effort `docker compose --profile infra down` before `full up -d --build` to reduce port-8080 conflicts.
+
+**Decisions / Assumptions**
+- Keep route/proxy ownership unchanged; nginx in full mode still proxies to `catalog-service:8081` and `order-service:8082` on the internal docker network.
+
+**Known Issues / Follow-ups**
+- Unrelated local change in `docs/CODEX_WORKING_AGREEMENT.md` remains uncommitted.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile full up -d --build`
+    - `cd tests/e2e && npm run e2e:all`
+    - `docker compose --profile full down`
+- Manual checks:
+    - Full stack started without needing host ports `8081`/`8082`.
+    - `e2e:all` completed successfully against nginx on `8080`.
+
+**Suggested Next Step**
+- Add a lightweight `docker compose --profile full config --services` check in docs/scripts for quick profile sanity validation.

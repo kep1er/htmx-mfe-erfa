@@ -49,6 +49,9 @@
 - [x] Extend Playwright smoke coverage for catalog filter interactions
 - [x] Fix catalog filter SQL runtime error (`lower(bytea)`) by switching to a pre-built lowercase LIKE pattern parameter
 - [x] Fix htmx filter form trigger so rarity/category selection filters without requiring search text
+- [x] Remove host port mappings for app containers in compose `full` profile (`8081`/`8082`) to avoid local conflicts
+- [x] Update README full/E2E guidance for infra/full exclusivity on port `8080`
+- [x] Add best-effort `infra down` pre-step in `tests/e2e/scripts/e2e-all.mjs`
 
 ## Next (Do Not Implement Yet)
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
@@ -56,8 +59,8 @@
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile)
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
-- [ ] Resolve host port `8082` conflict strategy for full compose mode on dev machines
 - [ ] Add category/rarity filter state reset UX (clear filters action)
+- [ ] Add dedicated Playwright test file for catalog filtering permutations (keep smoke test small)
 
 ## Later
 - [ ] Persist cart/order data (if desired)

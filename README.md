@@ -51,11 +51,21 @@ Open: `http://localhost:8080`
 - After template/code changes, trigger `Build Project` if restart does not happen automatically.
 
 ## Full/E2E Mode (all containers)
+`infra` and `full` profiles cannot run at the same time because both publish host port `8080` (`nginx-dev` vs `nginx`).
+Before starting full mode, stop infra mode:
+
+```bash
+docker compose --profile infra down
+```
+
 Start full stack in Docker:
 
 ```bash
 docker compose --profile full up -d --build
 ```
+
+In full mode, `catalog-service` and `order-service` are internal-only (no host ports `8081`/`8082`).
+Access services through nginx on `http://localhost:8080`.
 
 Run Playwright:
 ```bash
@@ -102,11 +112,12 @@ docker compose logs --tail 200 nginx catalog-service order-service postgres
 - Nginx shell: `http://localhost:8080`
 - Catalog health JSON: `http://localhost:8080/catalog/health`
 - Order health JSON: `http://localhost:8080/orders/health`
-- Catalog health page: `http://localhost:8081/catalog/health-page`
-- Order health page: `http://localhost:8082/orders/health-page`
-- Actuator health:
-  - `http://localhost:8081/actuator/health`
-  - `http://localhost:8082/actuator/health`
+- Host-run apps only (infra mode):
+  - Catalog health page: `http://localhost:8081/catalog/health-page`
+  - Order health page: `http://localhost:8082/orders/health-page`
+  - Actuator health:
+    - `http://localhost:8081/actuator/health`
+    - `http://localhost:8082/actuator/health`
 
 ## Notes
 - Compose `full` profile uses `web/nginx/nginx.docker.conf` (proxy by service name).
