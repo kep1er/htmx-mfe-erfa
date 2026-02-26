@@ -699,3 +699,37 @@
 
 **Suggested Next Step**
 - Add a lightweight `docker compose --profile full config --services` check in docs/scripts for quick profile sanity validation.
+
+### 2026-02-26 - Session 21
+**Goal**
+- Fix Playwright E2E timeout around catalog category filtering by using DOM-based waits/assertions and stable test hooks.
+
+**Implemented**
+- Updated `apps/catalog-service/src/main/resources/templates/fragments/products.html`:
+  - added `data-testid="catalog-filter"` on the filter form
+  - added `data-testid="catalog-item"` on each rendered catalog list item
+  - added `data-testid="catalog-empty"` on the empty-state message.
+- Updated `tests/e2e/specs/smoke.spec.ts`:
+  - waits for filter UI to be loaded before interacting (`catalog-filter`)
+  - waits for list readiness (`catalog-item` present or `catalog-empty` present)
+  - removed brittle response URL waits for filter checks
+  - validates rarity/category filtering via DOM outcomes
+  - stabilized search interactions using typed key events to trigger htmx `keyup` filtering reliably.
+
+**Decisions / Assumptions**
+- Kept backend filtering behavior unchanged; this is a test reliability and test-hook-only change.
+- Used existing category data and asserted category filtering via rendered item text instead of network interception.
+
+**Known Issues / Follow-ups**
+- Unrelated local change in `docs/CODEX_WORKING_AGREEMENT.md` remains uncommitted.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile full up -d --build`
+    - `cd tests/e2e && npm run e2e:all`
+    - `docker compose --profile full down`
+- Manual checks:
+    - Playwright smoke suite passed (`2 passed`) including category/rarity/search assertions and cart update flow.
+
+**Suggested Next Step**
+- Split catalog filter assertions into a dedicated Playwright spec file to keep smoke checks focused and fast.

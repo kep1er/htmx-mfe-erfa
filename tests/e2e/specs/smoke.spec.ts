@@ -26,6 +26,13 @@ test("shell smoke checks", async ({ page }) => {
     .poll(async () => (await catalogProducts.innerText()).trim())
     .not.toBe("Loading catalog products...");
   await expect(catalogProducts).toContainText("Magical Items");
+  const catalogFilter = page.locator("[data-testid='catalog-filter']");
+  const catalogItems = page.locator("[data-testid='catalog-item']");
+  const catalogEmpty = page.locator("[data-testid='catalog-empty']");
+  await expect(catalogFilter).toBeVisible();
+  await expect
+    .poll(async () => (await catalogItems.count()) + (await catalogEmpty.count()))
+    .toBeGreaterThan(0);
 
   const searchInput = page.locator("#catalog-search-input");
   const raritySelect = page.locator("#catalog-rarity-select");
@@ -33,45 +40,60 @@ test("shell smoke checks", async ({ page }) => {
   await expect(searchInput).toBeVisible();
   await expect(raritySelect).toBeVisible();
   await expect(categorySelect).toBeVisible();
+  const typeSearch = async (value: string) => {
+    await searchInput.click();
+    await searchInput.press("Control+A");
+    await searchInput.type(value);
+  };
 
-  const rarityResponse = page.waitForResponse((response) => {
-    return (
-      response.url().includes("/catalog/fragments/products") &&
-      response.url().includes("rarity=uncommon") &&
-      response.status() === 200
-    );
-  });
   await raritySelect.selectOption("uncommon");
-  await rarityResponse;
-  await expect(catalogProducts).toContainText(/uncommon/i);
+  await expect
+    .poll(async () => {
+      const count = await catalogItems.count();
+      if (count === 0) {
+        return false;
+      }
+      for (let i = 0; i < count; i += 1) {
+        const itemText = (await catalogItems.nth(i).innerText()).toLowerCase();
+        if (!itemText.includes("uncommon")) {
+          return false;
+        }
+      }
+      return true;
+    })
+    .toBe(true);
 
   const categoryOptions = categorySelect.locator("option");
   const firstCategoryValue = await categoryOptions.nth(1).getAttribute("value");
   expect(firstCategoryValue).not.toBeNull();
-  const categoryResponse = page.waitForResponse((response) => {
-    return (
-      response.url().includes("/catalog/fragments/products") &&
-      response.url().includes(`category=${encodeURIComponent(firstCategoryValue!)}`) &&
-      response.status() === 200
-    );
-  });
-  await raritySelect.selectOption("");
-  await categorySelect.selectOption(firstCategoryValue!);
-  await categoryResponse;
-  await expect(catalogProducts).toContainText(firstCategoryValue!);
+  const categoryValue =
+    (await categorySelect.locator("option[value='Curios']").count()) > 0
+      ? "Curios"
+      : firstCategoryValue!;
+  await categorySelect.selectOption(categoryValue);
+  await expect
+    .poll(async () => {
+      const count = await catalogItems.count();
+      if (count === 0) {
+        return false;
+      }
+      for (let i = 0; i < count; i += 1) {
+        const itemText = (await catalogItems.nth(i).innerText()).toLowerCase();
+        if (!itemText.includes(categoryValue.toLowerCase()) || !itemText.includes("uncommon")) {
+          return false;
+        }
+      }
+      return true;
+    })
+    .toBe(true);
 
-  await categorySelect.selectOption("");
-  await searchInput.fill("Weather");
-  await searchInput.dispatchEvent("change");
+  await typeSearch("Weather");
   await expect(catalogProducts).toContainText("Pocket Weather Jar");
 
-  await searchInput.fill("zzzz-no-such-item");
-  await searchInput.dispatchEvent("change");
-  await expect(catalogProducts).toContainText("No magical items found for the current filters.");
+  await typeSearch("zzzz-no-such-item");
+  await expect(catalogEmpty).toBeVisible();
 
-  await searchInput.fill("Weather");
-  await searchInput.dispatchEvent("change");
-  await raritySelect.selectOption("uncommon");
+  await typeSearch("Weather");
   await expect(catalogProducts).toContainText("Pocket Weather Jar");
 
   const detailButton = page.locator("button[data-item-id='itm_001']");

@@ -52,6 +52,8 @@
 - [x] Remove host port mappings for app containers in compose `full` profile (`8081`/`8082`) to avoid local conflicts
 - [x] Update README full/E2E guidance for infra/full exclusivity on port `8080`
 - [x] Add best-effort `infra down` pre-step in `tests/e2e/scripts/e2e-all.mjs`
+- [x] Add stable catalog filter test hooks (`catalog-filter`, `catalog-item`, `catalog-empty`) in products fragment
+- [x] Replace Playwright filter response-URL waits with DOM-based readiness and assertion checks
 
 ## Next (Do Not Implement Yet)
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
