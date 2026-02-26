@@ -62,6 +62,9 @@
 - [x] Move health UI to shell route `/health` and remove home-page health panels
 - [x] Add top-bar search/pill filter flow that always returns to catalog view
 - [x] Update Playwright smoke coverage for shell routes (`/`, `/cart`, `/health`) and cart flow
+- [x] Beautify shell/catalog/cart UI with reusable Tailwind button/pill classes and centered shell layout
+- [x] Convert top-bar rarity/category filters to native radio controls and keep catalog query sync
+- [x] Add catalog item image placeholder fallback for empty/broken images
 
 ## Next (Do Not Implement Yet)
 - [x] Add service healthchecks for catalog/order containers and tighten compose dependency readiness

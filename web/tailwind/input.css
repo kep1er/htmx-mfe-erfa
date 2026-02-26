@@ -7,3 +7,33 @@
         @apply bg-slate-100 text-slate-900;
     }
 }
+
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-60;
+    }
+
+    .btn-primary {
+        @apply btn border-slate-900 bg-slate-900 text-white hover:bg-slate-800;
+    }
+
+    .btn-secondary {
+        @apply btn border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+    }
+
+    .pill {
+        @apply inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 md:text-sm;
+    }
+
+    .pill-active {
+        @apply border-slate-900 bg-slate-900 text-white;
+    }
+
+    .pill-radio:checked + .pill {
+        @apply pill-active;
+    }
+
+    .pill-radio:focus-visible + .pill {
+        @apply ring-2 ring-slate-400 ring-offset-1;
+    }
+}

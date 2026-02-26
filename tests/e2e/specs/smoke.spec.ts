@@ -5,9 +5,6 @@ test("shell smoke checks", async ({ page }) => {
 
   await expect(page).toHaveTitle(/Webshop Demo Shell/);
 
-  const shopBadge = page.locator("shop-badge[label='Bootstrap Step 1']");
-  await expect(shopBadge).toHaveCount(1);
-
   const appMain = page.locator("#app-main");
   await expect(appMain).toBeVisible();
   await expect(appMain).toContainText("Magical Items");
@@ -19,7 +16,7 @@ test("shell smoke checks", async ({ page }) => {
     .toBeGreaterThan(0);
 
   const searchInput = page.locator("#topbar-search-input");
-  const uncommonPill = page.locator("button[data-pill-key='rarity'][data-pill-value='uncommon']");
+  const uncommonPill = page.locator("[data-testid='pill-rarity-uncommon']");
   await expect(searchInput).toBeVisible();
   await expect(uncommonPill).toBeVisible();
   await uncommonPill.click();

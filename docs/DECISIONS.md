@@ -111,3 +111,8 @@
 - **Decision**: Keep compose app healthchecks curl-based and install `curl` in both Spring runtime images
 - **Why**: HTTP checks are clearer than prior shell `/dev/tcp` probes and now work reliably once runtime images include curl
 - **Impact**: `catalog-service` and `order-service` Docker runtime stages add curl; compose healthchecks continue using `curl -fsS` against `/catalog/health` and `/orders/health`
+
+- **Date**: 2026-02-26
+- **Decision**: Keep top-bar rarity filter test hook `data-testid="pill-rarity-uncommon"` stable in shell markup
+- **Why**: Playwright now uses this hook for route-preserving top-bar filter coverage without CSS/label-coupled selectors
+- **Impact**: Shell visual restyling can continue without breaking this specific E2E selector contract

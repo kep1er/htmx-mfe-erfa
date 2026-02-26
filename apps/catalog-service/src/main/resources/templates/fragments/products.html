@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<section th:fragment="productList" data-testid="catalog-view" class="space-y-4">
-    <div class="rounded border bg-white p-4 shadow-sm">
-        <h2 class="text-lg font-semibold">Magical Items</h2>
+<section th:fragment="productList" data-testid="catalog-view" class="space-y-5">
+    <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 class="text-xl font-semibold text-slate-900">Magical Items</h2>
         <p class="mt-1 text-sm text-slate-600">
             Use the top bar to search and filter by rarity or category.
         </p>
     </div>
 
-    <p class="rounded border bg-white p-4 text-sm text-slate-600 shadow-sm"
+    <p class="rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm"
        data-testid="catalog-empty"
        th:if="${#lists.isEmpty(items)}">
         No magical items found for the current filters.
     </p>
 
-    <ul class="space-y-2" th:if="${!#lists.isEmpty(items)}">
+    <ul class="space-y-3" th:if="${!#lists.isEmpty(items)}">
         <li th:each="item : ${items}"
             data-testid="catalog-item"
-            class="rounded border bg-white p-4 shadow-sm">
-            <div class="space-y-3">
+            class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="space-y-4">
                 <div th:replace="~{fragments/item-summary :: summary}" th:with="item=${item}"></div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button type="button"
-                            class="rounded border border-slate-300 px-3 py-1 text-sm text-slate-700"
+                            class="btn-secondary"
                             th:attr="data-item-id=${item.id}"
                             th:hx-get="@{/catalog/fragments/items/{id}(id=${item.id})}"
                             hx-target="#catalog-detail"
@@ -34,7 +34,7 @@
                           hx-swap="none">
                         <input type="hidden" name="sku" th:value="${item.id}">
                         <input type="hidden" name="qty" value="1">
-                        <button type="submit" class="rounded bg-slate-900 px-3 py-1 text-sm text-white">
+                        <button type="submit" class="btn-primary">
                             Add to cart
                         </button>
                     </form>
@@ -44,7 +44,7 @@
     </ul>
 
     <div id="catalog-detail"
-         class="rounded border bg-white p-4 text-sm text-slate-600 shadow-sm">
+         class="rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm">
         Select an item to view details.
     </div>
 </section>

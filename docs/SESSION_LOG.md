@@ -891,3 +891,49 @@
 
 **Suggested Next Step**
 - Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).
+
+### 2026-02-26 - Session 26
+**Goal**
+- Beautify the shell + catalog/cart UI while keeping routes and behavior intact.
+
+**Implemented**
+- Updated shell layout in `web/nginx/html/index.html`:
+  - centered app container (`max-w-5xl`) with consistent spacing
+  - removed the `shop-badge` ("Bootstrap Step 1") from the top bar
+  - kept shell route links/htmx behavior for `/`, `/cart`, `/health`
+  - replaced top-bar filter pills with native radio fieldsets for rarity/category plus search and clear action
+- Added reusable Tailwind component classes in `web/tailwind/input.css` (`@layer components`):
+  - `.btn`, `.btn-primary`, `.btn-secondary`
+  - `.pill`, `.pill-active` (+ radio checked/focus styling)
+- Updated shell JS in `web/nginx/assets/js/app.js`:
+  - switched filter state sync from hidden-input buttons to native radios
+  - preserved soft navigation and query-param sync behavior
+  - clear action resets `q`, `rarity`, `category` and reloads catalog
+- Updated catalog summary fragment `apps/catalog-service/.../item-summary.html`:
+  - placeholder block for blank image URL
+  - image `onerror` fallback to placeholder
+  - kept summary fragment contract intact (`data-testid`, `data-item-id`, single root)
+- Applied consistent button classes/spacing in:
+  - `apps/catalog-service/.../products.html`
+  - `apps/order-service/.../cart.html`
+  - `web/nginx/html/fragments/health-view.html`
+- Updated Playwright smoke test selectors for the new native pill controls and removed old `shop-badge` assertion.
+
+**Decisions / Assumptions**
+- Added one stable top-bar hook (`data-testid="pill-rarity-uncommon"`) for resilient filter E2E interactions.
+- Kept service-owned fragment responsibilities unchanged (catalog item summary ownership and order cart composition).
+
+**Known Issues / Follow-ups**
+- None in scope.
+
+**Verification**
+- Commands run:
+  - `docker compose --profile full up -d --build`
+  - `cd tests/e2e && npm run e2e:all`
+  - `docker compose --profile full down`
+- Manual checks:
+  - Playwright smoke suite passed (`2 passed`) with catalog load, top-bar filtering, cart flow, and health checks.
+  - Compose stack was shut down after verification.
+
+**Suggested Next Step**
+- Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile).

@@ -8,11 +8,10 @@ const HEALTH_FRAGMENT_URL = "/fragments/health-view.html";
 const appMain = document.querySelector("#app-main");
 const topbarForm = document.querySelector("#topbar-catalog-form");
 const searchInput = document.querySelector("#topbar-search-input");
-const rarityInput = document.querySelector("#topbar-rarity-input");
-const categoryInput = document.querySelector("#topbar-category-input");
+const rarityInputs = Array.from(document.querySelectorAll("input[name='rarity']"));
+const categoryInputs = Array.from(document.querySelectorAll("input[name='category']"));
 const clearFiltersButton = document.querySelector("#topbar-clear-filters");
 const navHome = document.querySelector("#nav-home");
-const pillButtons = Array.from(document.querySelectorAll("[data-pill-key][data-pill-value]"));
 
 function cleanParams(params) {
     const clean = new URLSearchParams(params);
@@ -24,11 +23,32 @@ function cleanParams(params) {
     return clean;
 }
 
+function selectedRadioValue(radios) {
+    const checkedRadio = radios.find((radio) => radio.checked);
+    return checkedRadio ? checkedRadio.value : "";
+}
+
+function setSelectedRadioValue(radios, value) {
+    let found = false;
+    radios.forEach((radio) => {
+        const shouldCheck = radio.value === value;
+        radio.checked = shouldCheck;
+        if (shouldCheck) {
+            found = true;
+        }
+    });
+
+    if (!found && radios.length > 0) {
+        const defaultRadio = radios.find((radio) => radio.value === "") ?? radios[0];
+        defaultRadio.checked = true;
+    }
+}
+
 function topbarParams() {
     const params = new URLSearchParams();
     params.set("q", searchInput?.value ?? "");
-    params.set("rarity", rarityInput?.value ?? "");
-    params.set("category", categoryInput?.value ?? "");
+    params.set("rarity", selectedRadioValue(rarityInputs));
+    params.set("category", selectedRadioValue(categoryInputs));
     return cleanParams(params);
 }
 
@@ -36,31 +56,8 @@ function syncTopbarFromParams(params) {
     if (searchInput) {
         searchInput.value = params.get("q") ?? "";
     }
-    if (rarityInput) {
-        rarityInput.value = params.get("rarity") ?? "";
-    }
-    if (categoryInput) {
-        categoryInput.value = params.get("category") ?? "";
-    }
-    updatePillStates();
-}
-
-function updatePillStates() {
-    const activeRarity = rarityInput?.value ?? "";
-    const activeCategory = categoryInput?.value ?? "";
-
-    pillButtons.forEach((button) => {
-        const key = button.dataset.pillKey;
-        const value = button.dataset.pillValue;
-        const isActive = key === "rarity"
-            ? value === activeRarity
-            : value === activeCategory;
-        button.classList.toggle("bg-slate-900", isActive);
-        button.classList.toggle("text-white", isActive);
-        button.classList.toggle("border-slate-900", isActive);
-        button.classList.toggle("border-slate-300", !isActive);
-        button.setAttribute("aria-pressed", String(isActive));
-    });
+    setSelectedRadioValue(rarityInputs, params.get("rarity") ?? "");
+    setSelectedRadioValue(categoryInputs, params.get("category") ?? "");
 }
 
 function htmxLoad(url) {
@@ -109,43 +106,20 @@ function replaceCatalogBrowserUrl() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    if (topbarForm) {
-        topbarForm.addEventListener("submit", () => {
-            updatePillStates();
-        });
-    }
-
-    if (clearFiltersButton && searchInput && rarityInput && categoryInput && topbarForm) {
+    if (clearFiltersButton && searchInput && topbarForm) {
         clearFiltersButton.addEventListener("click", () => {
             searchInput.value = "";
-            rarityInput.value = "";
-            categoryInput.value = "";
-            updatePillStates();
+            setSelectedRadioValue(rarityInputs, "");
+            setSelectedRadioValue(categoryInputs, "");
             topbarForm.requestSubmit();
         });
     }
 
-    pillButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            const key = button.dataset.pillKey;
-            const value = button.dataset.pillValue ?? "";
-            if (key === "rarity" && rarityInput) {
-                rarityInput.value = rarityInput.value === value ? "" : value;
-            }
-            if (key === "category" && categoryInput) {
-                categoryInput.value = categoryInput.value === value ? "" : value;
-            }
-            updatePillStates();
-            topbarForm?.requestSubmit();
-        });
-    });
-
-    if (navHome && searchInput && rarityInput && categoryInput) {
+    if (navHome && searchInput) {
         navHome.addEventListener("click", () => {
             searchInput.value = "";
-            rarityInput.value = "";
-            categoryInput.value = "";
-            updatePillStates();
+            setSelectedRadioValue(rarityInputs, "");
+            setSelectedRadioValue(categoryInputs, "");
         });
     }
 
