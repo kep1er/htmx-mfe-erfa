@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -59,6 +60,27 @@ public class OrderController {
         Model model
     ) {
         inMemoryCartService.addItem(sku, qty);
+        applyCartModel(model);
+        return "fragments/cart :: cartSummary";
+    }
+
+    @PostMapping("/orders/cart/items/{sku}/increment")
+    public String incrementCartItem(@PathVariable String sku, Model model) {
+        inMemoryCartService.increment(sku);
+        applyCartModel(model);
+        return "fragments/cart :: cartSummary";
+    }
+
+    @PostMapping("/orders/cart/items/{sku}/decrement")
+    public String decrementCartItem(@PathVariable String sku, Model model) {
+        inMemoryCartService.decrement(sku);
+        applyCartModel(model);
+        return "fragments/cart :: cartSummary";
+    }
+
+    @PostMapping("/orders/cart/items/{sku}/remove")
+    public String removeCartItem(@PathVariable String sku, Model model) {
+        inMemoryCartService.remove(sku);
         applyCartModel(model);
         return "fragments/cart :: cartSummary";
     }

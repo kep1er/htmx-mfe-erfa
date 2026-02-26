@@ -733,3 +733,48 @@
 
 **Suggested Next Step**
 - Split catalog filter assertions into a dedicated Playwright spec file to keep smoke checks focused and fast.
+
+### 2026-02-26 - Session 22
+**Goal**
+- Implement catalog-owned item summary fragment reuse in both catalog list and order cart, with cart lazy-loading summary per line and order-owned qty controls.
+
+**Implemented**
+- Added catalog fragment template `apps/catalog-service/src/main/resources/templates/fragments/item-summary.html`:
+  - `summary` fragment with single root element
+  - stable hooks `data-testid="item-summary"` and `data-item-id`
+  - renders name/category/rarity/price/stock (+ image when present)
+  - `summaryNotFound` fallback fragment for missing items.
+- Added catalog endpoint `GET /catalog/fragments/item-summary/{id}`:
+  - returns `item-summary :: summary` for existing item
+  - returns HTTP 404 + `summaryNotFound` fragment when item is missing.
+- Updated catalog products fragment to reuse the shared summary via `th:replace` and keep existing catalog actions (`View details`, `Add to cart`) unchanged.
+- Extended order cart domain/actions:
+  - `InMemoryCartService`: `increment`, `decrement` (remove on zero), `remove`
+  - `OrderController`: new htmx endpoints
+    - `POST /orders/cart/items/{sku}/increment`
+    - `POST /orders/cart/items/{sku}/decrement`
+    - `POST /orders/cart/items/{sku}/remove`
+- Updated order cart fragment:
+  - each cart line lazy-loads summary from `/catalog/fragments/item-summary/{sku}` (`hx-trigger="revealed"`, `hx-swap="outerHTML"`)
+  - keeps order-owned cart controls for `+`, `-`, and `remove`, each swapping `#cart-fragment` via `outerHTML`.
+- Updated Playwright smoke test:
+  - add-to-cart now targets `itm_001` explicitly
+  - verifies cart includes loaded shared summary (`data-testid="item-summary"` with `data-item-id="itm_001"` and item name text).
+
+**Decisions / Assumptions**
+- Used Option A by design: one catalog summary request per visible cart line.
+- Missing item summaries return HTTP 404 plus a small fragment to keep cart rendering resilient.
+
+**Known Issues / Follow-ups**
+- Unrelated local changes in `docs/CODEX_WORKING_AGREEMENT.md` may exist and should remain outside this task commit if present.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile full up -d --build`
+    - `cd tests/e2e && npm run e2e:all`
+    - `docker compose --profile full down`
+- Manual checks:
+    - Playwright smoke suite passed with cart summary lazy-load assertion.
+
+**Suggested Next Step**
+- Add an optional batch summary endpoint in catalog for later optimization once cart lines grow.

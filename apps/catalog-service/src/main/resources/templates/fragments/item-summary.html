@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<article th:fragment="summary"
+         class="rounded border border-slate-200 bg-white p-3"
+         data-testid="item-summary"
+         th:attr="data-item-id=${item.id}">
+    <div class="flex items-start gap-3">
+        <div th:if="${!#strings.isEmpty(item.image)}"
+             class="h-14 w-14 shrink-0 overflow-hidden rounded bg-slate-100">
+            <img th:src="${item.image}"
+                 th:alt="${item.name}"
+                 class="h-full w-full object-cover"/>
+        </div>
+        <div class="min-w-0">
+            <p class="font-medium" th:text="${item.name}">Item Name</p>
+            <p class="text-sm text-slate-600">
+                <span th:text="${item.category}">Category</span>
+                <span> · </span>
+                <span class="uppercase" th:text="${item.rarity.value()}">common</span>
+            </p>
+            <p class="text-sm text-slate-600">
+                <span th:text="${'$' + #numbers.formatDecimal(item.price, 1, 2)}">$0.00</span>
+                <span> · Stock: </span>
+                <span th:text="${item.stock}">0</span>
+            </p>
+        </div>
+    </div>
+</article>
+
+<article th:fragment="summaryNotFound"
+         class="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+         data-testid="item-summary-not-found"
+         th:attr="data-item-id=${itemId}">
+    Item summary unavailable.
+</article>
+</body>
+</html>

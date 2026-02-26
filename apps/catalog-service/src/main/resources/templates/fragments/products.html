@@ -43,37 +43,28 @@
     <ul class="mt-4 space-y-2" th:if="${!#lists.isEmpty(items)}">
         <li th:each="item : ${items}"
             data-testid="catalog-item"
-            class="flex items-center justify-between gap-3 rounded bg-slate-50 p-2">
-            <div class="min-w-0">
-                <p class="font-medium" th:text="${item.name}">Item Name</p>
-                <p class="text-sm text-slate-600">
-                    <span th:text="${item.category}">Category</span>
-                    <span> · </span>
-                    <span class="uppercase" th:text="${item.rarity.value()}">common</span>
-                </p>
-                <p class="text-sm text-slate-600">
-                    Stock: <span th:text="${item.stock}">0</span>
-                </p>
-            </div>
-            <div class="flex items-center gap-3">
-                <span th:text="${'$' + #numbers.formatDecimal(item.price, 1, 2)}">$0.00</span>
-                <button type="button"
-                        class="rounded border border-slate-300 px-3 py-1 text-sm text-slate-700"
-                        th:attr="data-item-id=${item.id}"
-                        th:hx-get="@{/catalog/fragments/items/{id}(id=${item.id})}"
-                        hx-target="#catalog-detail"
-                        hx-swap="innerHTML">
-                    View details
-                </button>
-                <form hx-post="/orders/cart/items"
-                      hx-target="#cart-fragment"
-                      hx-swap="outerHTML">
-                    <input type="hidden" name="sku" th:value="${item.id}">
-                    <input type="hidden" name="qty" value="1">
-                    <button type="submit" class="rounded bg-slate-900 px-3 py-1 text-sm text-white">
-                        Add to cart
+            class="rounded bg-slate-50 p-2">
+            <div class="space-y-3">
+                <div th:replace="~{fragments/item-summary :: summary}" th:with="item=${item}"></div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button"
+                            class="rounded border border-slate-300 px-3 py-1 text-sm text-slate-700"
+                            th:attr="data-item-id=${item.id}"
+                            th:hx-get="@{/catalog/fragments/items/{id}(id=${item.id})}"
+                            hx-target="#catalog-detail"
+                            hx-swap="innerHTML">
+                        View details
                     </button>
-                </form>
+                    <form hx-post="/orders/cart/items"
+                          hx-target="#cart-fragment"
+                          hx-swap="outerHTML">
+                        <input type="hidden" name="sku" th:value="${item.id}">
+                        <input type="hidden" name="qty" value="1">
+                        <button type="submit" class="rounded bg-slate-900 px-3 py-1 text-sm text-white">
+                            Add to cart
+                        </button>
+                    </form>
+                </div>
             </div>
         </li>
     </ul>

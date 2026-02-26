@@ -112,7 +112,11 @@ test("shell smoke checks", async ({ page }) => {
     .not.toBe("Loading cart placeholder...");
 
   const cartBeforeAdd = (await cartFragment.innerText()).trim();
-  const addToCartButton = page.locator("button", { hasText: "Add to cart" }).first();
+  const weatherCatalogItem = catalogProducts
+    .locator("[data-testid='catalog-item']")
+    .filter({ hasText: "Pocket Weather Jar (Mini)" });
+  await expect(weatherCatalogItem).toHaveCount(1);
+  const addToCartButton = weatherCatalogItem.locator("button", { hasText: "Add to cart" });
   await expect(addToCartButton).toBeVisible();
   await addToCartButton.click();
 
@@ -120,6 +124,19 @@ test("shell smoke checks", async ({ page }) => {
     .poll(async () => (await cartFragment.innerText()).trim())
     .not.toBe(cartBeforeAdd);
   await expect(cartFragment).toContainText("Items:");
+  await cartFragment.scrollIntoViewIfNeeded();
+
+  const cartSummary = cartFragment.locator("[data-testid='item-summary'][data-item-id='itm_001']");
+  const cartSummaryPlaceholder = cartFragment.locator(
+    "[data-testid='cart-item-summary-placeholder'][data-item-id='itm_001']",
+  );
+  await expect
+    .poll(async () => (await cartSummary.count()) + (await cartSummaryPlaceholder.count()))
+    .toBeGreaterThan(0);
+  if ((await cartSummaryPlaceholder.count()) > 0) {
+    await cartSummaryPlaceholder.first().scrollIntoViewIfNeeded();
+  }
+  await expect(cartSummary).toContainText("Pocket Weather Jar (Mini)");
 });
 
 test("health endpoints return 200", async ({ request }) => {

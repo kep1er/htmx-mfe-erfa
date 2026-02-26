@@ -54,15 +54,19 @@
 - [x] Add best-effort `infra down` pre-step in `tests/e2e/scripts/e2e-all.mjs`
 - [x] Add stable catalog filter test hooks (`catalog-filter`, `catalog-item`, `catalog-empty`) in products fragment
 - [x] Replace Playwright filter response-URL waits with DOM-based readiness and assertion checks
+- [x] Add catalog-owned item summary fragment endpoint (`/catalog/fragments/item-summary/{id}`)
+- [x] Reuse catalog item summary in products list and cart line rendering
+- [x] Add cart line increment/decrement/remove endpoints and controls with htmx fragment swaps
+- [x] Assert lazy-loaded cart item summary for `itm_001` in Playwright smoke test
 
 ## Next (Do Not Implement Yet)
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
-- [ ] Add cart line remove/decrement action and endpoint in `order-service` fragment flow
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile)
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 - [ ] Add category/rarity filter state reset UX (clear filters action)
 - [ ] Add dedicated Playwright test file for catalog filtering permutations (keep smoke test small)
+- [ ] Add optional catalog batch summary endpoint for cart optimization (defer until needed)
 
 ## Later
 - [ ] Persist cart/order data (if desired)
@@ -72,4 +76,4 @@
 - [ ] Add CI checks (build/test/lint)
 
 ## Blocked / Questions
-- [ ] Confirm whether to keep publishing app ports `8081` and `8082` on host in compose, or make them internal-only
+- [ ] Confirm whether to keep Option A per-line cart summary requests or move to a batched summary fetch when cart size grows

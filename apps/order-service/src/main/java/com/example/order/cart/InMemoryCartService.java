@@ -20,6 +20,37 @@ public class InMemoryCartService {
         quantitiesBySku.merge(sku.trim(), safeQty, Integer::sum);
     }
 
+    public synchronized void increment(String sku) {
+        addItem(sku, 1);
+    }
+
+    public synchronized void decrement(String sku) {
+        if (sku == null || sku.isBlank()) {
+            return;
+        }
+
+        String key = sku.trim();
+        Integer currentQty = quantitiesBySku.get(key);
+        if (currentQty == null) {
+            return;
+        }
+
+        if (currentQty <= 1) {
+            quantitiesBySku.remove(key);
+            return;
+        }
+
+        quantitiesBySku.put(key, currentQty - 1);
+    }
+
+    public synchronized void remove(String sku) {
+        if (sku == null || sku.isBlank()) {
+            return;
+        }
+
+        quantitiesBySku.remove(sku.trim());
+    }
+
     public synchronized CartSnapshot snapshot() {
         List<CartLine> lines = new ArrayList<>(quantitiesBySku.size());
         int itemCount = 0;

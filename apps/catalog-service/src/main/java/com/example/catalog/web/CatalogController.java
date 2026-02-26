@@ -4,6 +4,7 @@ import com.example.catalog.magic.MagicShopItemService;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -65,5 +66,20 @@ public class CatalogController {
     public String itemDetailFragment(@PathVariable String id, Model model) {
         model.addAttribute("item", magicShopItemService.getById(id).orElse(null));
         return "fragments/item-detail :: detailCard";
+    }
+
+    @GetMapping("/catalog/fragments/item-summary/{id}")
+    public String itemSummaryFragment(@PathVariable String id, Model model, HttpServletResponse response) {
+        return magicShopItemService
+            .getById(id)
+            .map(item -> {
+                model.addAttribute("item", item);
+                return "fragments/item-summary :: summary";
+            })
+            .orElseGet(() -> {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                model.addAttribute("itemId", id);
+                return "fragments/item-summary :: summaryNotFound";
+            });
     }
 }

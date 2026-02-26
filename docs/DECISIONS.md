@@ -91,3 +91,8 @@
 - **Decision**: Keep category options in the existing `/catalog/fragments/products` Thymeleaf fragment model instead of adding a separate categories endpoint
 - **Why**: Smallest incremental approach for htmx filter UI with no additional route contract
 - **Impact**: Catalog filter form and list are rendered/swapped together in one fragment; controller now provides `categories` and current filter values for fragment re-rendering
+
+- **Date**: 2026-02-26
+- **Decision**: Make `catalog-service` the owner of shared item summary HTML via `/catalog/fragments/item-summary/{id}` and compose it in `order-service` cart with per-line htmx lazy loads
+- **Why**: Ensure summary markup/styling changes in one place and automatically propagate to catalog list and cart views
+- **Impact**: Catalog list and cart lines now reuse the same summary fragment; cart uses Option A (`one summary request per visible line`) and keeps quantity/remove controls in `order-service`
