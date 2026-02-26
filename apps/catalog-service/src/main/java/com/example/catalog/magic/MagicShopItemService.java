@@ -23,4 +23,42 @@ public class MagicShopItemService {
     public Optional<MagicShopItem> getById(String id) {
         return magicShopItemRepository.findById(id);
     }
+
+    @Transactional(readOnly = true)
+    public List<MagicShopItem> listFiltered(String q, String rarity, String category) {
+        String normalizedQ = normalize(q);
+        String normalizedCategory = normalize(category);
+        Rarity normalizedRarity = parseRarity(rarity);
+
+        if (rarity != null && !rarity.isBlank() && normalizedRarity == null) {
+            return List.of();
+        }
+
+        return magicShopItemRepository.findFiltered(normalizedQ, normalizedRarity, normalizedCategory);
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> listCategories() {
+        return magicShopItemRepository.findDistinctCategories();
+    }
+
+    private static String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
+    }
+
+    private static Rarity parseRarity(String rarity) {
+        String normalized = normalize(rarity);
+        if (normalized == null) {
+            return null;
+        }
+        try {
+            return Rarity.fromValue(normalized);
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
+    }
 }

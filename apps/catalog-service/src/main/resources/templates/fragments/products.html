@@ -3,7 +3,40 @@
 <body>
 <section th:fragment="productList" class="rounded border p-4">
     <h2 class="text-lg font-semibold">Magical Items</h2>
-    <ul class="mt-3 space-y-2">
+    <form class="mt-3 grid gap-2 md:grid-cols-3"
+          hx-get="/catalog/fragments/products"
+          hx-target="#catalog-products"
+          hx-swap="innerHTML"
+          hx-trigger="keyup changed delay:300ms">
+        <input id="catalog-search-input"
+               name="q"
+               type="text"
+               placeholder="Search name, category, or tag"
+               th:value="${currentQ}"
+               class="rounded border px-3 py-2 text-sm"/>
+        <select id="catalog-rarity-select" name="rarity" class="rounded border px-3 py-2 text-sm">
+            <option value="" th:selected="${#strings.isEmpty(currentRarity)}">All rarities</option>
+            <option value="common" th:selected="${currentRarity == 'common'}">common</option>
+            <option value="uncommon" th:selected="${currentRarity == 'uncommon'}">uncommon</option>
+            <option value="rare" th:selected="${currentRarity == 'rare'}">rare</option>
+            <option value="legendary" th:selected="${currentRarity == 'legendary'}">legendary</option>
+        </select>
+        <select id="catalog-category-select" name="category" class="rounded border px-3 py-2 text-sm">
+            <option value="" th:selected="${#strings.isEmpty(currentCategory)}">All categories</option>
+            <option th:each="cat : ${categories}"
+                    th:value="${cat}"
+                    th:text="${cat}"
+                    th:selected="${currentCategory == cat}">
+                Category
+            </option>
+        </select>
+    </form>
+
+    <p class="mt-4 rounded bg-slate-50 p-3 text-sm text-slate-600" th:if="${#lists.isEmpty(items)}">
+        No magical items found for the current filters.
+    </p>
+
+    <ul class="mt-4 space-y-2" th:if="${!#lists.isEmpty(items)}">
         <li th:each="item : ${items}" class="flex items-center justify-between gap-3 rounded bg-slate-50 p-2">
             <div class="min-w-0">
                 <p class="font-medium" th:text="${item.name}">Item Name</p>

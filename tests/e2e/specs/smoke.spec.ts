@@ -20,12 +20,27 @@ test("shell smoke checks", async ({ page }) => {
     .poll(async () => (await orderHealth.innerText()).trim())
     .not.toBe("Loading order health...");
 
-  const catalogProducts = page.locator("div[hx-get='/catalog/fragments/products']");
+  const catalogProducts = page.locator("#catalog-products");
   await expect(catalogProducts).toBeVisible();
   await expect
     .poll(async () => (await catalogProducts.innerText()).trim())
     .not.toBe("Loading catalog products...");
   await expect(catalogProducts).toContainText("Magical Items");
+
+  const searchInput = page.locator("#catalog-search-input");
+  const raritySelect = page.locator("#catalog-rarity-select");
+  await expect(searchInput).toBeVisible();
+  await expect(raritySelect).toBeVisible();
+
+  await searchInput.fill("Weather");
+  await expect(catalogProducts).toContainText("Pocket Weather Jar");
+
+  await searchInput.fill("zzzz-no-such-item");
+  await expect(catalogProducts).toContainText("No magical items found for the current filters.");
+
+  await searchInput.fill("Weather");
+  await raritySelect.selectOption("uncommon");
+  await expect(catalogProducts).toContainText("Pocket Weather Jar");
 
   const detailButton = page.locator("button[data-item-id='itm_001']");
   await expect(detailButton).toBeVisible();

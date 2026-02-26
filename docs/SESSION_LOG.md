@@ -553,3 +553,50 @@
 
 **Suggested Next Step**
 - Add a minimal catalog filter/search fragment interaction (htmx query parameter) over `MagicShopItem` list results.
+
+### 2026-02-26 - Session 17
+**Goal**
+- Add catalog search and filters (query + rarity + category) via htmx while preserving add-to-cart and detail interactions.
+
+**Implemented**
+- Added filtering support in `MagicShopItemRepository`:
+  - `findFiltered(q, rarity, category)` query matching query text against name/category/tags and applying optional rarity/category filters.
+  - `findDistinctCategories()` for category select options.
+- Extended `MagicShopItemService` with:
+  - `listFiltered(q, rarity, category)`
+  - `listCategories()`
+- Updated `/catalog/fragments/products` controller endpoint to accept `q`, `rarity`, `category` and pass:
+  - filtered items
+  - distinct categories
+  - current filter values for selected/filled state
+- Updated `fragments/products.html` to include:
+  - htmx filter form (search input + rarity select + category select)
+  - stable update target `#catalog-products`
+  - empty-state text when no items match
+  - preserved "View details" and add-to-cart behavior
+- Updated `web/nginx/html/index.html` with stable container id `catalog-products`.
+- Extended Playwright smoke test with filter assertions:
+  - query "Weather" returns Pocket Weather Jar
+  - nonsense query shows empty-state text
+  - rarity "uncommon" keeps expected result
+  - existing detail and add-to-cart assertions remain
+
+**Decisions / Assumptions**
+- Kept category source in existing products fragment render model instead of adding a new categories API endpoint.
+- Kept routing contracts unchanged under `/catalog/**` and `/orders/**`.
+
+**Known Issues / Follow-ups**
+- Verification in full container mode is currently blocked on this machine because host port `8082` is already occupied by a local Java process.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile full up -d --build`
+    - `cd tests/e2e && npm run e2e:all`
+    - `Get-NetTCPConnection -LocalPort 8082 -State Listen`
+    - `docker compose --profile full down`
+- Manual checks:
+    - Confirmed both verification commands failed for the same reason: bind error on `0.0.0.0:8082`.
+    - Confirmed compose resources were shut down after verification attempts.
+
+**Suggested Next Step**
+- Resolve host port 8082 conflict for full profile runs (stop local process or make compose app ports internal-only if approved).

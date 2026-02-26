@@ -44,6 +44,9 @@
 - [x] Switch catalog products fragment to `MagicShopItem` list rendering
 - [x] Add catalog rich detail fragment endpoint + Thymeleaf detail partial
 - [x] Keep add-to-cart contract intact with `sku=item.id` and verify via Playwright
+- [x] Add catalog search + rarity/category filters via htmx on `/catalog/fragments/products`
+- [x] Add catalog products empty-state messaging for no filter results
+- [x] Extend Playwright smoke coverage for catalog filter interactions
 
 ## Next (Do Not Implement Yet)
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
@@ -51,7 +54,8 @@
 - [ ] Add a one-command helper for host-run Spring dev mode (starts both services with `dev` profile)
 - [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
-- [ ] Add catalog list filtering/search interaction (htmx + server-side query)
+- [ ] Resolve host port `8082` conflict strategy for full compose mode on dev machines
+- [ ] Add category/rarity filter state reset UX (clear filters action)
 
 ## Later
 - [ ] Persist cart/order data (if desired)

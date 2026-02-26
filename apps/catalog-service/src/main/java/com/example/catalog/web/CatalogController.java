@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CatalogController {
@@ -46,8 +47,17 @@ public class CatalogController {
     }
 
     @GetMapping("/catalog/fragments/products")
-    public String productFragment(Model model) {
-        model.addAttribute("items", magicShopItemService.listAll());
+    public String productFragment(
+        @RequestParam(required = false) String q,
+        @RequestParam(required = false) String rarity,
+        @RequestParam(required = false) String category,
+        Model model
+    ) {
+        model.addAttribute("items", magicShopItemService.listFiltered(q, rarity, category));
+        model.addAttribute("categories", magicShopItemService.listCategories());
+        model.addAttribute("currentQ", q);
+        model.addAttribute("currentRarity", rarity);
+        model.addAttribute("currentCategory", category);
         return "fragments/products :: productList";
     }
 

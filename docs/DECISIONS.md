@@ -86,3 +86,8 @@
 - **Decision**: Move catalog shell fragment contract from legacy `Product` to `MagicShopItem` and add detail fragment route `GET /catalog/fragments/items/{id}`
 - **Why**: Align UI rendering with new catalog domain while keeping htmx-driven incremental SSR flow
 - **Impact**: `/catalog/fragments/products` now renders `MagicShopItem` fields and add-to-cart posts `sku=item.id`; nginx route ownership remains unchanged under `/catalog/**`
+
+- **Date**: 2026-02-26
+- **Decision**: Keep category options in the existing `/catalog/fragments/products` Thymeleaf fragment model instead of adding a separate categories endpoint
+- **Why**: Smallest incremental approach for htmx filter UI with no additional route contract
+- **Impact**: Catalog filter form and list are rendered/swapped together in one fragment; controller now provides `categories` and current filter values for fragment re-rendering
