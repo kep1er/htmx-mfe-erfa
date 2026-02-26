@@ -2,6 +2,9 @@ services:
   postgres:
     image: postgres:17-alpine
     container_name: webshop-postgres
+    profiles:
+      - infra
+      - full
     networks:
       - webshop-net
     environment:
@@ -23,6 +26,8 @@ services:
       context: ./apps/catalog-service
       dockerfile: Dockerfile
     container_name: webshop-catalog-service
+    profiles:
+      - full
     networks:
       - webshop-net
     depends_on:
@@ -42,6 +47,8 @@ services:
       context: ./apps/order-service
       dockerfile: Dockerfile
     container_name: webshop-order-service
+    profiles:
+      - full
     networks:
       - webshop-net
     depends_on:
@@ -53,6 +60,8 @@ services:
   nginx:
     image: nginx:1.27-alpine
     container_name: webshop-nginx
+    profiles:
+      - full
     networks:
       - webshop-net
     depends_on:
@@ -64,6 +73,23 @@ services:
       - "8080:80"
     volumes:
       - ./web/nginx/nginx.docker.conf:/etc/nginx/nginx.conf:ro
+      - ./web/nginx/html:/usr/share/nginx/html:ro
+      - ./web/nginx/assets:/usr/share/nginx/assets:ro
+
+  nginx-dev:
+    image: nginx:1.27-alpine
+    container_name: webshop-nginx-dev
+    profiles:
+      - infra
+    networks:
+      - webshop-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
       - ./web/nginx/html:/usr/share/nginx/html:ro
       - ./web/nginx/assets:/usr/share/nginx/assets:ro
 

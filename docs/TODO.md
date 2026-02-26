@@ -33,10 +33,12 @@
 - [x] Enforce fixed handoff delimiters/section order and require writing `docs/codex/LATEST.md` even on failure
 - [x] Enable Spring Boot DevTools + `dev` profile for faster Thymeleaf feedback loops in both apps
 - [x] Update README with dev-mode run instructions and IntelliJ auto-restart notes
+- [x] Add compose profile split for `infra` (postgres + nginx-dev) and `full` (postgres + apps + nginx)
+- [x] Add `web/nginx/nginx.dev.conf` and update docs/commands for both runtime modes
 
 ## Next (Do Not Implement Yet)
-- [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add service healthchecks for catalog/order containers and tighten compose dependency readiness
+- [ ] Add a small cross-platform helper script to start both Spring apps with `dev` profile in separate terminals
 - [ ] Add CI workflow to run `npm run e2e:all` (or equivalent split steps) on PRs
 
 ## Later

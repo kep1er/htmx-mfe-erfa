@@ -374,3 +374,39 @@
 
 **Suggested Next Step**
 - Add one tiny script/command aliases to start both services in `dev` profile together for faster local startup.
+
+### 2026-02-26 - Session 12
+**Goal**
+- Add compose profiles for infra-only local dev (`postgres` + nginx) without breaking full containerized E2E mode.
+
+**Implemented**
+- Updated `docker-compose.yml` with profile-based runtime modes:
+  - `infra`: `postgres` + `nginx-dev`
+  - `full`: `postgres` + `catalog-service` + `order-service` + `nginx`
+- Added `web/nginx/nginx.dev.conf` for host-run Spring apps:
+  - `/catalog/**` -> `http://host.docker.internal:8081`
+  - `/orders/**` -> `http://host.docker.internal:8082`
+- Kept `web/nginx/nginx.docker.conf` unchanged for full containerized mode (service-name proxies).
+- Updated `tests/e2e/scripts/e2e-all.mjs` to bootstrap stack with `docker compose --profile full up -d --build`.
+- Updated `README.md` with exact commands for:
+  - dev/infra mode (`docker compose --profile infra up -d` + host Maven runs with `dev` profile)
+  - full/E2E mode (`docker compose --profile full up -d --build` + Playwright run commands)
+
+**Decisions / Assumptions**
+- `nginx` service name remains the full-mode proxy; `nginx-dev` is infra-only to keep proxy configs explicit.
+- `postgres` participates in both profiles to avoid duplicate DB service definitions.
+
+**Known Issues / Follow-ups**
+- Existing unrelated local changes were present before this task and were left uncommitted.
+
+**Verification**
+- Commands run:
+    - `docker compose --profile infra config --services`
+    - `docker compose --profile full config --services`
+    - `git status --short`
+- Manual checks:
+    - Confirmed `infra` includes only `postgres` and `nginx-dev`.
+    - Confirmed `full` includes `postgres`, both app containers, and `nginx`.
+
+**Suggested Next Step**
+- Add container healthchecks for `catalog-service` and `order-service`, then switch nginx `depends_on` to `service_healthy`.

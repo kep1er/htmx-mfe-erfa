@@ -19,8 +19,14 @@ Demo webshop monorepo with:
 - Node.js `20+` and npm
 - Docker Desktop (or Docker Engine + Compose)
 
-## Dev Mode (Fast Feedback for Thymeleaf)
-Run each Spring Boot app with the `dev` profile to disable Thymeleaf template cache and enable DevTools restart/livereload:
+## Dev/Infra Mode (Docker infra + host-run Spring apps)
+Start only postgres + nginx in Docker:
+
+```bash
+docker compose --profile infra up -d
+```
+
+Run each Spring Boot app on host with the `dev` profile (Thymeleaf cache off + DevTools restart/livereload):
 
 ```bash
 cd apps/catalog-service
@@ -32,32 +38,22 @@ cd apps/order-service
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
+Open: `http://localhost:8080`
+
 ### IntelliJ Settings (for auto-restart)
 - Enable: `Settings > Build, Execution, Deployment > Compiler > Build project automatically`
 - Enable Registry flag: `compiler.automake.allow.when.app.running`
 - Keep `dev` profile active in each Spring Boot run configuration.
 - After template/code changes, trigger `Build Project` if restart does not happen automatically.
 
-Note: Docker Compose + Playwright remains the E2E mode. Dev profile is for fast local iteration.
+## Full/E2E Mode (all containers)
+Start full stack in Docker:
 
-## Run Full Stack (Docker Compose)
 ```bash
-docker compose up -d --build
+docker compose --profile full up -d --build
 ```
 
-This starts:
-- `postgres`
-- `catalog-service` (container)
-- `order-service` (container)
-- `nginx`
-
-## E2E Smoke Tests (Playwright)
-### Prerequisites / Start Stack
-```bash
-docker compose up -d --build
-```
-
-### One-Command Local E2E (Cross-Platform)
+Run Playwright:
 ```bash
 cd tests/e2e
 npm install
@@ -109,6 +105,7 @@ docker compose logs --tail 200 nginx catalog-service order-service postgres
   - `http://localhost:8082/actuator/health`
 
 ## Notes
-- Compose uses `web/nginx/nginx.docker.conf` (proxy by service name).
-- `web/nginx/nginx.conf` remains for host-local app mode (`host.docker.internal` proxy targets).
+- Compose `full` profile uses `web/nginx/nginx.docker.conf` (proxy by service name).
+- Compose `infra` profile uses `web/nginx/nginx.dev.conf` (proxy to `host.docker.internal` for host-run apps).
+- `web/nginx/nginx.conf` remains available for host-local app mode compatibility.
 - `catalog-service` Flyway migration is in `apps/catalog-service/src/main/resources/db/migration/V1__init_catalog.sql`.

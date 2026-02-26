@@ -63,7 +63,7 @@ async function waitForUrl(url) {
 async function main() {
   let composeStarted = false;
   try {
-    await runCommand("docker compose up -d --build", repoRoot);
+    await runCommand("docker compose --profile full up -d --build", repoRoot);
     composeStarted = true;
     await waitForUrl(BASE_URL);
     await runCommand("npx playwright test", testsDir);
