@@ -11,42 +11,45 @@ This repository is an example webshop monorepo used to demonstrate:
 
 ## Core Rules (Always Follow)
 
-1. Read these files before making changes:
-    - `docs/ARCHITECTURE.md`
-    - `docs/DECISIONS.md`
-    - `docs/SESSION_LOG.md`
+1. Always read these files before making changes:
+    - `docs/PROJECT_STATE.md`
     - `docs/TODO.md`
 
-2. Start each session with:
+2. Read these additional files only when needed:
+    - `docs/SESSION_LOG.md` when there is uncertainty, conflicting context, or user request
+    - `docs/ARCHITECTURE.md` when deeper architecture detail is required
+    - `docs/DECISIONS.md` when validating/changing prior technical decisions
+
+3. Start each session with:
     - a short plan
     - assumptions (if any)
 
-3. Implement only the requested scope.
+4. Implement only the requested scope.
     - Do not add extra features.
     - Do not jump ahead to the next step.
 
-4. Keep the project runnable after each step.
+5. Keep the project runnable after each step.
 
-5. Prefer small, incremental changes over broad refactors.
+6. Prefer small, incremental changes over broad refactors.
 
-6. Do not change stable contracts without documenting the reason in `docs/DECISIONS.md`.
+7. Do not change stable contracts without documenting the reason in `docs/DECISIONS.md`.
    Stable contracts include:
     - ports
     - route ownership by service
     - nginx proxy paths
     - htmx target IDs / fragment IDs (once introduced)
 
-7. If something is unspecified:
+8. If something is unspecified:
     - choose the simplest default
     - document it in `docs/DECISIONS.md`
 
-8. Preserve the existing folder structure unless a change is required.
+9. Preserve the existing folder structure unless a change is required.
 
-9. Prefer the simplest toolchain.
+10. Prefer the simplest toolchain.
     - Avoid introducing extra monorepo tooling unless necessary.
     - `packages/ui-components` should remain a standalone package unless workspaces are clearly needed.
 
-10. Do not refactor unrelated code.
+11. Do not refactor unrelated code.
 
 ## Technology Intent
 
@@ -68,8 +71,9 @@ This repository is an example webshop monorepo used to demonstrate:
 
 Update:
 
-- `docs/SESSION_LOG.md` (what changed, assumptions, issues)
+- `docs/PROJECT_STATE.md` (compact current-state snapshot)
 - `docs/TODO.md` (completed items + next small steps)
+- `docs/SESSION_LOG.md` (only when uncertainty, conflicts, or user request require a full narrative log)
 - `docs/DECISIONS.md` (only if a design/technical choice was made)
 
 ## Git / Commit Rules
