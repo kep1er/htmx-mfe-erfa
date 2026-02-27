@@ -99,10 +99,13 @@ function loadRouteFromLocation() {
 }
 
 function replaceCatalogBrowserUrl() {
-    const params = topbarParams();
-    const query = params.toString();
-    const nextUrl = query ? `${CATALOG_PATH}?${query}` : CATALOG_PATH;
-    window.history.replaceState({}, "", nextUrl);
+  const params = topbarParams();
+
+  params.delete("selected");
+
+  const query = params.toString();
+  const nextUrl = query ? `${CATALOG_PATH}?${query}` : CATALOG_PATH;
+  window.history.replaceState({}, "", nextUrl);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -120,6 +123,7 @@ window.addEventListener("DOMContentLoaded", () => {
             searchInput.value = "";
             setSelectedRadioValue(rarityInputs, "");
             setSelectedRadioValue(categoryInputs, "");
+            window.history.replaceState({}, "", CATALOG_PATH);
         });
     }
 

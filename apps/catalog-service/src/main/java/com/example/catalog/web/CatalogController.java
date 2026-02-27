@@ -1,9 +1,6 @@
 package com.example.catalog.web;
 
 import com.example.catalog.magic.MagicShopItemService;
-import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.Instant;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Controller
 public class CatalogController {
@@ -49,16 +50,18 @@ public class CatalogController {
 
     @GetMapping("/catalog/fragments/products")
     public String productFragment(
-        @RequestParam(required = false) String q,
-        @RequestParam(required = false) String rarity,
-        @RequestParam(required = false) String category,
-        Model model
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String rarity,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String selected,
+            Model model
     ) {
         model.addAttribute("items", magicShopItemService.listFiltered(q, rarity, category));
         model.addAttribute("categories", magicShopItemService.listCategories());
         model.addAttribute("currentQ", q);
         model.addAttribute("currentRarity", rarity);
         model.addAttribute("currentCategory", category);
+        model.addAttribute("selected", selected);
         return "fragments/products :: productList";
     }
 
@@ -71,15 +74,15 @@ public class CatalogController {
     @GetMapping("/catalog/fragments/item-summary/{id}")
     public String itemSummaryFragment(@PathVariable String id, Model model, HttpServletResponse response) {
         return magicShopItemService
-            .getById(id)
-            .map(item -> {
-                model.addAttribute("item", item);
-                return "fragments/item-summary :: summary";
-            })
-            .orElseGet(() -> {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                model.addAttribute("itemId", id);
-                return "fragments/item-summary :: summaryNotFound";
-            });
+                .getById(id)
+                .map(item -> {
+                    model.addAttribute("item", item);
+                    return "fragments/item-summary :: summary";
+                })
+                .orElseGet(() -> {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    model.addAttribute("itemId", id);
+                    return "fragments/item-summary :: summaryNotFound";
+                });
     }
 }

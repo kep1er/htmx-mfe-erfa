@@ -17,7 +17,7 @@
 
             <ul class="space-y-3" th:if="${!#lists.isEmpty(items)}">
                 <li th:each="item : ${items}"
-                    data-testid="catalog-item"
+                    th:classappend="${item.id == selected} ? ' ring-2 ring-slate-900/10 border-slate-300' : ''"
                     class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div class="min-w-0 flex-1">
@@ -26,8 +26,10 @@
                         <div class="flex shrink-0 flex-wrap items-center gap-2 lg:justify-end">
                             <button type="button"
                                     class="btn-secondary"
-                                    th:attr="data-item-id=${item.id}"
-                                    th:hx-get="@{/catalog/fragments/items/{id}(id=${item.id})}"
+                                    th:attr="
+                                      hx-get=@{/catalog/fragments/items/{id}(id=${item.id})},
+                                      hx-push-url=@{/(selected=${item.id})}
+                                    "
                                     hx-target="#catalog-detail"
                                     hx-swap="innerHTML">
                                 View details
@@ -47,9 +49,15 @@
         </div>
 
         <div id="catalog-detail"
-             class="rounded-xl border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm lg:sticky lg:top-24">
+             class="rounded-xl border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm lg:sticky lg:top-24"
+             th:attr="
+               hx-get=${selected} != null ? @{/catalog/fragments/items/{id}(id=${selected})} : null,
+               hx-trigger=${selected} != null ? 'load' : null
+             "
+             hx-target="#catalog-detail"
+             hx-swap="innerHTML">
             <h3 class="text-base font-semibold text-slate-900">Item Details</h3>
-            <p class="mt-2">Select an item to view details.</p>
+            <p class="mt-2" th:if="${selected} == null">Select an item to view details.</p>
         </div>
     </div>
 </section>
