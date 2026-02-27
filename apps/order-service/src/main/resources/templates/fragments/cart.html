@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:hx-on="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="cartSummary" id="cart-fragment" class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
     <h2 class="text-xl font-semibold text-slate-900">Cart</h2>
@@ -9,30 +9,20 @@
         <li th:each="line : ${lines}" class="space-y-3 rounded-lg bg-slate-50 p-3" th:attr="data-sku=${line.sku}">
             <div class="rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-500"
                  data-testid="cart-item-summary-placeholder"
-                 th:attr="
-                   data-item-id=${line.sku},
-                   hx-get=@{/catalog/fragments/item-summary/{id}(id=${line.sku})},
-                   hx-indicator=${'#indicator-' + line.sku}
-                 "
+                 th:attr="data-item-id=${line.sku}"
+                 th:hx-get="@{/catalog/fragments/item-summary/{id}(id=${line.sku})}"
                  hx-trigger="revealed"
-                 hx-swap="outerHTML"
-                 hx-on::response-error="
-                   this.innerHTML =
-                     '<div class=&quot;rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700&quot;>' +
-                     'Item details unavailable (catalog offline).' +
-                     '</div>';
-                 "
-                 hx-on::send-error="
-                   this.innerHTML =
-                     '<div class=&quot;rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700&quot;>' +
-                     'Item details unavailable (network error).' +
-                     '</div>';
-                 ">
-              <span class="htmx-indicator inline-flex items-center gap-2"
-                    th:attr="id=${'indicator-' + line.sku}">
-                <span class="h-3 w-3 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700"></span>
-                Loading item…
-              </span>
+                 hx-swap="outerHTML">
+                Loading item...
+
+                <!-- TODO(EX06): Add a loading indicator while the summary fragment is being fetched.
+                     Hint: Use hx-indicator and an element with class "htmx-indicator" (spinner).
+                -->
+
+                <!-- TODO(EX06): Add an error fallback when the request fails (e.g. catalog is down / 502).
+                     Hint: Use hx-on::response-error and hx-on::send-error to replace this placeholder content
+                     with a friendly message.
+                -->
             </div>
             <div class="flex flex-wrap items-center gap-2">
                 <span class="text-sm text-slate-600">Qty: <span th:text="${line.qty}">1</span></span>
