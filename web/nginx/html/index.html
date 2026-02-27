@@ -28,7 +28,7 @@
               hx-target="#app-main"
               hx-swap="innerHTML"
               hx-push-url="true"
-              hx-trigger="submit, keyup changed delay:300ms from:#topbar-search-input, change from:input[name='rarity'], change from:input[name='category']">
+              hx-trigger="submit, keyup changed delay:300ms from:#topbar-search-input">
                 <div class="space-y-3">
                     <input id="topbar-search-input"
                            data-testid="topbar-search-input"
@@ -36,54 +36,6 @@
                            type="search"
                            placeholder="Search magical items"
                            class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"/>
-                    <div class="flex flex-wrap items-end gap-4">
-                        <fieldset class="min-w-0 space-y-2">
-                            <legend class="text-xs font-semibold uppercase tracking-wide text-slate-500">Rarity</legend>
-                            <div class="flex flex-wrap gap-2">
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-rarity-all" type="radio" name="rarity" value="" checked>
-                                    <label for="topbar-rarity-all" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm">All</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-rarity-common" type="radio" name="rarity" value="common">
-                                    <label for="topbar-rarity-common" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm">common</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-rarity-uncommon" type="radio" name="rarity" value="uncommon">
-                                    <label for="topbar-rarity-uncommon" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm" data-testid="pill-rarity-uncommon">uncommon</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-rarity-rare" type="radio" name="rarity" value="rare">
-                                    <label for="topbar-rarity-rare" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm">rare</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-rarity-legendary" type="radio" name="rarity" value="legendary">
-                                    <label for="topbar-rarity-legendary" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm">legendary</label>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="min-w-0 space-y-2">
-                            <legend class="text-xs font-semibold uppercase tracking-wide text-slate-500">Category</legend>
-                            <div class="flex flex-wrap gap-2">
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-category-all" type="radio" name="category" value="" checked>
-                                    <label for="topbar-category-all" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm">All</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-category-curios" type="radio" name="category" value="Curios">
-                                    <label for="topbar-category-curios" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm">Curios</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-category-arcana" type="radio" name="category" value="Arcana">
-                                    <label for="topbar-category-arcana" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm">Arcana</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input class="peer sr-only" id="topbar-category-apparel" type="radio" name="category" value="Apparel">
-                                    <label for="topbar-category-apparel" class="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 peer-focus-visible:ring-2 peer-focus-visible:ring-slate-400 peer-focus-visible:ring-offset-1 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white md:text-sm">Apparel</label>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
                 </div>
             </form>
 
