@@ -2,9 +2,6 @@ package com.example.order.web;
 
 import com.example.order.cart.InMemoryCartService;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.Instant;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Controller
 public class OrderController {
@@ -62,10 +63,10 @@ public class OrderController {
 
     @PostMapping("/orders/cart/items")
     public String addCartItem(
-        @RequestParam("sku") String sku,
-        @RequestParam(name = "qty", defaultValue = "1") int qty,
-        Model model,
-        HttpServletResponse response
+            @RequestParam("sku") String sku,
+            @RequestParam(name = "qty", defaultValue = "1") int qty,
+            Model model,
+            HttpServletResponse response
     ) {
         inMemoryCartService.addItem(sku, qty);
         applyCartModel(model);
@@ -104,6 +105,6 @@ public class OrderController {
     }
 
     private void triggerCartChanged(HttpServletResponse response) {
-        response.setHeader("HX-Trigger", "{\"cart:changed\": true}");
+        // TODO(EX05): Add HX-Trigger response header to broadcast {"cart:changed": true} on cart mutations.
     }
 }
