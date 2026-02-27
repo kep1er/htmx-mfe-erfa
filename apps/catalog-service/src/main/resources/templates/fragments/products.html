@@ -24,16 +24,26 @@
                             <div th:replace="~{fragments/item-summary :: summary}" th:with="item=${item}"></div>
                         </div>
                         <div class="flex shrink-0 flex-wrap items-center gap-2 lg:justify-end">
+                            <!-- TODO(EX03): Wire up this button with htmx so it loads the item detail into the right panel AND deep-links.
+                               Required behavior:
+                                 1) Load the detail fragment into #catalog-detail (no full page reload)
+                                 2) Update the browser URL to /?selected=<item.id>
+
+                               Hint (detail fragment URL):
+                                 /catalog/fragments/items/<item.id>
+
+                               Required htmx attributes to add on the button:
+                                 - hx-get="..."
+                                 - hx-target="#catalog-detail"
+                                 - hx-swap="innerHTML"
+                                 - hx-push-url="..."   (should become "/?selected=<item.id>")
+                            -->
                             <button type="button"
                                     class="btn-secondary"
-                                    th:attr="
-                                      hx-get=@{/catalog/fragments/items/{id}(id=${item.id})},
-                                      hx-push-url=@{/(selected=${item.id})}
-                                    "
-                                    hx-target="#catalog-detail"
-                                    hx-swap="innerHTML">
+                                    th:attr="data-item-id=${item.id}">
                                 View details
                             </button>
+
                             <form hx-post="/orders/cart/items"
                                   hx-swap="none">
                                 <input type="hidden" name="sku" th:value="${item.id}">
@@ -48,16 +58,14 @@
             </ul>
         </div>
 
+        <!-- TODO(EX03): Support deep links:
+            If a 'selected' query param is present in the request, the detail panel should auto-load
+            /catalog/fragments/items/<selected> on initial render (hx-trigger="load").
+       -->
         <div id="catalog-detail"
-             class="rounded-xl border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm lg:sticky lg:top-24"
-             th:attr="
-               hx-get=${selected} != null ? @{/catalog/fragments/items/{id}(id=${selected})} : null,
-               hx-trigger=${selected} != null ? 'load' : null
-             "
-             hx-target="#catalog-detail"
-             hx-swap="innerHTML">
+             class="rounded-xl border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm lg:sticky lg:top-24">
             <h3 class="text-base font-semibold text-slate-900">Item Details</h3>
-            <p class="mt-2" th:if="${selected} == null">Select an item to view details.</p>
+            <p class="mt-2">Select an item to view details.</p>
         </div>
     </div>
 </section>
