@@ -17,27 +17,26 @@
             </div>
             <div class="flex flex-wrap items-center gap-2">
                 <span class="text-sm text-slate-600">Qty: <span th:text="${line.qty}">1</span></span>
-                <button type="button"
-                        class="btn-secondary"
-                        th:hx-post="@{/orders/cart/items/{sku}/decrement(sku=${line.sku})}"
-                        hx-target="#cart-fragment"
-                        hx-swap="outerHTML">
-                    -
-                </button>
-                <button type="button"
-                        class="btn-secondary"
-                        th:hx-post="@{/orders/cart/items/{sku}/increment(sku=${line.sku})}"
-                        hx-target="#cart-fragment"
-                        hx-swap="outerHTML">
-                    +
-                </button>
-                <button type="button"
-                        class="btn-secondary border-red-300 text-red-700 hover:bg-red-50"
-                        th:hx-post="@{/orders/cart/items/{sku}/remove(sku=${line.sku})}"
-                        hx-target="#cart-fragment"
-                        hx-swap="outerHTML">
-                    remove
-                </button>
+
+                <!-- TODO(EX04): Add cart controls using htmx (no full page reload).
+                     Add three buttons: decrement (-), increment (+), remove.
+                     Each must POST to order-service and then replace the whole cart fragment.
+
+                     Required:
+                     - hx-target="#cart-fragment"
+                     - hx-swap="outerHTML"
+
+                     Hints (endpoints):
+                     - decrement: /orders/cart/items/<sku>/decrement
+                     - increment: /orders/cart/items/<sku>/increment
+                     - remove:    /orders/cart/items/<sku>/remove
+
+                     Note:
+                     Use Thymeleaf to build URLs, e.g. @{/orders/cart/items/{sku}/increment(sku=${line.sku})}
+                -->
+                <div class="rounded border border-dashed border-slate-300 bg-white px-3 py-2 text-xs text-slate-500">
+                    TODO: add + / - / remove buttons here
+                </div>
             </div>
         </li>
     </ul>
